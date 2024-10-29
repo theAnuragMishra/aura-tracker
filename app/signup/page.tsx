@@ -2,7 +2,7 @@ import React from "react";
 
 const Signup: React.FC = () => {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-r from-[#3B82F6] to-[#D946EF] text-white">
+    <div className="flex min-h-screen items-center justify-center bg-[url('./assests/back.jpg')] bg-cover text-white">
       <div className="w-full max-w-lg p-10 md:p-12 lg:p-10 space-y-10 rounded-lg shadow-lg bg-[#1b1c30]">
         <h2 className="text-3xl md:text-4xl font-bold text-center">Sign Up</h2>
         <form className="space-y-8">
