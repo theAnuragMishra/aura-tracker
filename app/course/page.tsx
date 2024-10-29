@@ -1,5 +1,6 @@
 "use client";
 import { FC } from "react";
+import Link from "next/link";
 import Header from "../components/Header2";
 
 interface Announcement {
@@ -84,6 +85,9 @@ const CoursePage: FC = () => {
             </li>
             <li className="mb-2 pl-1">
               <a href="#projects">Projects</a>
+            </li>
+            <li className="mb-2 pl-1">
+              <Link href="/course_material">Course Material</Link>
             </li>
           </ul>
         </aside>
