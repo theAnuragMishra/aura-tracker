@@ -7,6 +7,9 @@ import {
   generateSessionToken,
   createSession,
   setSessionTokenCookie,
+  getCurrentSession,
+  invalidateSession,
+  deleteSessionTokenCookie,
 } from "./auth";
 
 export async function handleLogin(data: FormData) {
@@ -41,7 +44,7 @@ export async function handleLogin(data: FormData) {
       return "Invalid email and password pair";
     }
   } else {
-    return "Enter password";
+    return "Enter your password";
   }
 }
 
@@ -72,4 +75,17 @@ export async function handleSignup(data: FormData) {
   } else {
     return "Password is required and cannot be empty.";
   }
+}
+
+export async function handleLogout() {
+  const { session } = await getCurrentSession();
+  if (!session) {
+    return {
+      error: "Unauthorized",
+    };
+  }
+
+  await invalidateSession(session.id);
+  await deleteSessionTokenCookie();
+  return redirect("/login");
 }

@@ -8,6 +8,14 @@ import { cache } from "react";
 
 import { createSupabaseClient } from "./supabase-client";
 
+import { Google } from "arctic";
+
+export const google = new Google(
+  process.env.GOOGLE_CLIENT_ID!,
+  process.env.GOOGLE_CLIENT_SECRET!,
+  "http://localhost:3000/api/login/google/callback"
+);
+
 export function generateSessionToken(): string {
   const bytes = new Uint8Array(20);
   crypto.getRandomValues(bytes);
@@ -44,12 +52,10 @@ export async function validateSessionToken(
 ): Promise<SessionValidationResult> {
   const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
   const supabase = createSupabaseClient();
-  const { data, error } = await supabase
+  const { data } = await supabase
     .from("user_sessions")
     .select("id, user_id, expires_at, users!inner(id)")
     .eq("id", sessionId);
-  console.log("validated data");
-  console.log(data);
 
   if (data![0] === null) {
     return { session: null, user: null };
