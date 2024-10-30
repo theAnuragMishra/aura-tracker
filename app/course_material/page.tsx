@@ -65,9 +65,34 @@ const modules: Module[] = [
   },
 ];
 
+// Initial completion status - later this will be fetched from a backend
+const initialCompletionStatus: Record<number, boolean> = {
+  1: false,
+  2: false,
+  3: false,
+};
+
 const CourseMaterial: FC = () => {
   const [expandedModule, setExpandedModule] = useState<number | null>(null);
   const [expandedChapter, setExpandedChapter] = useState<number | null>(null);
+  const [completionStatus, setCompletionStatus] = useState<
+    Record<number, boolean>
+  >(initialCompletionStatus);
+
+  const totalResources = Object.keys(completionStatus).length;
+  const completedResources = Object.values(completionStatus).filter(
+    (status) => status
+  ).length;
+  const progress = totalResources
+    ? (completedResources / totalResources) * 100
+    : 0;
+
+  const toggleResourceCompletion = (id: number) => {
+    setCompletionStatus((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
+  };
 
   return (
     <>
@@ -108,6 +133,19 @@ const CourseMaterial: FC = () => {
           <h1 className="text-3xl font-bold text-white mb-8">
             Course Materials
           </h1>
+
+          <div className="bg-gray-800 p-4 rounded-lg mb-6 text-center">
+            <h2 className="text-lg font-medium text-gray-300">Progress</h2>
+            <div className="relative h-4 bg-gray-600 rounded-full mt-2">
+              <div
+                className={`absolute h-full bg-purple-500 rounded-full transition-all duration-500`}
+                style={{ width: `${progress}%` }}
+              ></div>
+            </div>
+            <p className="text-gray-400 mt-2">
+              {Math.round(progress)}% Complete
+            </p>
+          </div>
 
           {modules.length === 0 ? (
             <p className="text-center text-gray-500">
@@ -169,7 +207,18 @@ const CourseMaterial: FC = () => {
                                 </p>
                               ) : (
                                 chapter.resources.map((resource) => (
-                                  <li key={resource.id} className="text-base">
+                                  <li
+                                    key={resource.id}
+                                    className="flex items-center space-x-2"
+                                  >
+                                    <input
+                                      type="checkbox"
+                                      checked={completionStatus[resource.id]}
+                                      onChange={() =>
+                                        toggleResourceCompletion(resource.id)
+                                      }
+                                      className="form-checkbox h-4 w-4 text-purple-500 rounded-md border-gray-300 focus:ring-purple-500"
+                                    />
                                     <a
                                       href={resource.link}
                                       target="_blank"
