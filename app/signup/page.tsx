@@ -5,16 +5,45 @@ import { useState } from "react";
 import { handleSignup } from "../lib/actions";
 
 import { FcGoogle } from "react-icons/fc";
+import { validatePassword } from "../lib/utils";
+import { useRouter } from "next/navigation";
 
 export default function SignUp() {
+  const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [role, setRole] = useState("student");
   const [errorMessage, setErrorMessage] = useState<string | undefined>("");
+
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newPassword = e.target.value;
+    setPassword(newPassword);
+
+    if (!newPassword) {
+      setErrorMessage("");
+      return;
+    }
+    if (!validatePassword(newPassword)) {
+      setErrorMessage(
+        "Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character."
+      );
+    } else {
+      setErrorMessage(""); // Clear the error if the password is valid
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const form = e.currentTarget;
-    const formData = new FormData(form);
-    const response = await handleSignup(formData);
-    setErrorMessage(response);
+    if (errorMessage) {
+      return;
+    }
+    if (password.length)
+      try {
+        await handleSignup(email, role, password);
+        router.push("/login");
+      } catch (error) {
+        if (error instanceof Error) setErrorMessage(error.message);
+      }
   };
   return (
     <div className="flex min-h-screen items-center justify-center bg-[url('./assests/back.jpg')] bg-cover text-white">
@@ -29,6 +58,8 @@ export default function SignUp() {
               id="email"
               type="email"
               placeholder="enter your email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               name="email"
               required
               className="mt-1 w-full px-5 py-2 text-black text-md md:text-lg rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3B82F6]"
@@ -40,6 +71,8 @@ export default function SignUp() {
               <input
                 value="student"
                 name="role"
+                checked={role === "student"}
+                onChange={(e) => setRole(e.target.value)}
                 type="radio"
                 required
                 className=""
@@ -51,6 +84,8 @@ export default function SignUp() {
               <input
                 value="professor"
                 name="role"
+                checked={role === "professor"}
+                onChange={(e) => setRole(e.target.value)}
                 type="radio"
                 required
                 className=""
@@ -61,6 +96,8 @@ export default function SignUp() {
               <input
                 value="rewarder"
                 name="role"
+                onChange={(e) => setRole(e.target.value)}
+                checked={role === "rewarder"}
                 type="radio"
                 required
                 className=""
@@ -78,13 +115,15 @@ export default function SignUp() {
             <input
               id="password"
               name="password"
+              value={password}
+              onChange={handlePasswordChange}
               placeholder="create a password"
               type="password"
               required
               className="mt-1 w-full px-5 py-2 text-black text-md md:text-lg rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3B82F6] m"
             />
           </div>
-          <p className="text-md italic text-red-500">{errorMessage}</p>
+          <p className="mt-3 text-md italic text-red-500">{errorMessage}</p>
           <button
             type="submit"
             className="w-full px-5 py-2 mt-3 text-lg md:text-xl font-semibold rounded-lg bg-purple-600 hover:bg-purple-900"

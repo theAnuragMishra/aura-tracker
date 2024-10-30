@@ -24,3 +24,9 @@ export const generateRandomUsername = async () => {
     }
   }
 };
+
+export const validatePassword = (password: string) => {
+  const criteria =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+  return criteria.test(password);
+};

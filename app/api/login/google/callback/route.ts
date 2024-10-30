@@ -45,6 +45,7 @@ export async function GET(request: Request): Promise<Response> {
   try {
     tokens = await google.validateAuthorizationCode(code, codeVerifier);
   } catch (e) {
+    console.error(e);
     // Invalid code or client credentials
     return new Response(null, {
       status: 400,
@@ -61,6 +62,10 @@ export async function GET(request: Request): Promise<Response> {
     .from("users")
     .select("*")
     .eq("google_id", googleUserId);
+
+  if (error) {
+    //todo
+  }
 
   const existingUser = data![0];
 
@@ -80,6 +85,10 @@ export async function GET(request: Request): Promise<Response> {
     .from("users")
     .insert({ email, full_name, google_id: googleUserId, avatar_url, username })
     .select();
+
+  if (error1) {
+    //todo
+  }
 
   const sessionToken = generateSessionToken();
   const session = await createSession(sessionToken, data1![0].id);
