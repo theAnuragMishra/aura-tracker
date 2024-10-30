@@ -5,7 +5,7 @@ import { handleLogin } from "../lib/actions";
 import { useState } from "react";
 
 export default function Login() {
-  const [errorMessage, setErrorMessage] = useState<string | null>("wrong h ");
+  const [errorMessage, setErrorMessage] = useState<string | null>("");
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.currentTarget;
@@ -41,8 +41,9 @@ export default function Login() {
             <input
               id="password"
               type="password"
+              name="password"
               required
-              className="mt-1 w-full px-5 py-3 text-black text-md md:text-lg rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3B82F6]"
+              className="mt-1 w-full px-5 py-2 text-black text-md md:text-lg rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3B82F6]"
             />
           </div>
           <p className="text-md italic text-red-500">{errorMessage}</p>
