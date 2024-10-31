@@ -1,5 +1,5 @@
 import { generateState, generateCodeVerifier } from "arctic";
-import { google } from "@/app/lib/auth";
+import { google } from "@/lib/auth";
 import { cookies } from "next/headers";
 
 export async function GET(): Promise<Response> {

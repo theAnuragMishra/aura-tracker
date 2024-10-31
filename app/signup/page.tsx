@@ -2,10 +2,10 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { handleSignup } from "../lib/actions";
+import { handleSignup } from "../../lib/actions";
 
 import { FcGoogle } from "react-icons/fc";
-import { validatePassword } from "../lib/utils";
+import { validatePassword } from "../../lib/utils";
 import { useRouter } from "next/navigation";
 
 export default function SignUp() {
@@ -132,12 +132,12 @@ export default function SignUp() {
           </button>
         </form>
         <div className="text-2xl w-full text-center mb-2">or</div>
-        <Link
+        <a
           href="/api/login/google"
           className="flex bg-white text-black text-2xl rounded-lg py-2 px-5 items-center justify-center"
         >
           Signup with <FcGoogle className="ml-2" />
-        </Link>
+        </a>
         <p className="text-center text-base md:text-lg mt-3">
           Already have an account?{" "}
           <Link href="/login" className="text-[#D946EF] hover:underline">

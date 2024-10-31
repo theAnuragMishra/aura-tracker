@@ -1,4 +1,5 @@
 import { FC } from "react";
+import { handleLogout } from "../../lib/actions";
 
 const Header: FC = () => {
   return (
@@ -15,7 +16,9 @@ const Header: FC = () => {
         </div>
       </div>
 
-      <button className="bg-purple-600 p-2 rounded-md">Logout </button>
+      <button onClick={handleLogout} className="bg-purple-600 p-2 rounded-md">
+        Logout{" "}
+      </button>
     </div>
   );
 };

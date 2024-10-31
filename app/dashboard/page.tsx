@@ -3,16 +3,16 @@ import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
 import Calendar from "../components/Calender";
 
-import { getCurrentSession } from "../lib/auth";
-import { createSupabaseClient } from "../lib/supabase-client";
+import { getCurrentSession } from "../../lib/auth";
+import { createSupabaseClient } from "../../lib/supabase-client";
 
 const Dashboard: FC = async () => {
   let username = "";
   const { user } = await getCurrentSession();
-  console.log(user);
+
   if (user) {
     const supabase = createSupabaseClient();
-    const { data, error } = await supabase
+    const { data } = await supabase
       .from("users")
       .select("username")
       .eq("id", user.id);

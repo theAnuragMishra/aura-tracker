@@ -2,13 +2,13 @@ import {
   generateSessionToken,
   createSession,
   setSessionTokenCookie,
-} from "@/app/lib/auth";
-import { google } from "@/app/lib/auth";
+} from "@/lib/auth";
+import { google } from "@/lib/auth";
 import { cookies } from "next/headers";
 
 import { decodeIdToken, type OAuth2Tokens } from "arctic";
-import { createSupabaseClient } from "@/app/lib/supabase-client";
-import { generateRandomUsername } from "@/app/lib/utils";
+import { createSupabaseClient } from "@/lib/supabase-client";
+import { generateRandomUsername } from "@/lib/utils";
 
 interface claimsInterface {
   sub: string;

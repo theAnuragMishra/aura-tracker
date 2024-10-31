@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 
-import { handleLogin } from "../lib/actions";
+import { handleLogin } from "../../lib/actions";
 import { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { useRouter } from "next/navigation";
@@ -72,12 +72,12 @@ export default function Login() {
           </button>
         </form>
         <div className="text-2xl w-full text-center mb-2">or</div>
-        <Link
+        <a
           href="/api/login/google"
           className="flex bg-white text-black text-2xl rounded-lg py-2 px-5 items-center justify-center"
         >
           Login with <FcGoogle className="ml-2" />
-        </Link>
+        </a>
         <p className="text-center text-base md:text-lg mt-3">
           Don&apos;t have an account?{" "}
           <Link href="/signup" className="text-[#D946EF] hover:underline">
