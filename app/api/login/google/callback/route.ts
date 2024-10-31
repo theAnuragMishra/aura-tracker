@@ -3,11 +3,15 @@ import {
   createSession,
   setSessionTokenCookie,
 } from "@/lib/auth";
+
+import jwt from "jsonwebtoken";
+
 import { google } from "@/lib/auth";
 import { cookies } from "next/headers";
 
 import { decodeIdToken, type OAuth2Tokens } from "arctic";
-import { createSupabaseClient } from "@/lib/supabase-client";
+import { createClient } from "@supabase/supabase-js";
+
 import { generateRandomUsername } from "@/lib/utils";
 
 interface claimsInterface {
@@ -19,7 +23,7 @@ interface claimsInterface {
 
 export async function GET(request: Request): Promise<Response> {
   const url = new URL(request.url);
-  const supabase = createSupabaseClient();
+
   const code = url.searchParams.get("code");
   const state = url.searchParams.get("state");
   const cookieStore = await cookies();
@@ -58,20 +62,48 @@ export async function GET(request: Request): Promise<Response> {
   const email = claims.email;
   const avatar_url = claims.picture;
 
-  const { data, error } = await supabase
+  const token = jwt.sign(
+    { google_id: googleUserId },
+    process.env.SUPABASE_JWT_SECRET!,
+    { expiresIn: "10m" }
+  );
+  const supabase_google = createClient(
+    process.env.SUPABASE_URL!,
+    process.env.SUPABASE_ANON_KEY!,
+    {
+      global: {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    }
+  );
+
+  const { data, error } = await supabase_google
     .from("users")
     .select("*")
     .eq("google_id", googleUserId);
 
   if (error) {
-    //todo
+    console.error("88" + error);
   }
 
   const existingUser = data![0];
 
   if (existingUser) {
+    const token_id = jwt.sign(
+      { user_id: existingUser.id },
+      process.env.SUPABASE_JWT_SECRET!,
+      {
+        expiresIn: "10m",
+      }
+    );
     const sessionToken = generateSessionToken();
-    const session = await createSession(sessionToken, existingUser.id);
+    const session = await createSession(
+      token_id,
+      sessionToken,
+      existingUser.id
+    );
     await setSessionTokenCookie(sessionToken, session!.expiresAt);
     return new Response(null, {
       status: 302,
@@ -80,18 +112,29 @@ export async function GET(request: Request): Promise<Response> {
       },
     });
   }
+
   const username: string = await generateRandomUsername();
-  const { data: data1, error: error1 } = await supabase
+  const { data: data1, error: error1 } = await supabase_google
     .from("users")
-    .insert({ email, full_name, google_id: googleUserId, avatar_url, username })
+    .insert({
+      email,
+      google_id: googleUserId,
+      raw_user_meta_data: { username, avatar_url, full_name },
+    })
     .select();
 
   if (error1) {
-    //todo
+    console.error("error1" + error);
   }
-
+  const token_id = jwt.sign(
+    { user_id: data1![0].id },
+    process.env.SUPABASE_JWT_SECRET!,
+    {
+      expiresIn: "10m",
+    }
+  );
   const sessionToken = generateSessionToken();
-  const session = await createSession(sessionToken, data1![0].id);
+  const session = await createSession(token_id, sessionToken, data1![0].id);
   await setSessionTokenCookie(sessionToken, session!.expiresAt);
   return new Response(null, {
     status: 302,

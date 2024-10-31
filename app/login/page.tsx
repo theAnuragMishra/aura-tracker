@@ -17,6 +17,7 @@ export default function Login() {
 
     try {
       await handleLogin(email, password);
+      console.log("logged in")
       router.push("/");
     } catch (error) {
       if (error instanceof Error) {

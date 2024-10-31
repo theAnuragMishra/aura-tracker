@@ -5,7 +5,7 @@ import { useState } from "react";
 import { handleSignup } from "../../lib/actions";
 
 import { FcGoogle } from "react-icons/fc";
-import { validatePassword } from "../../lib/utils";
+
 import { useRouter } from "next/navigation";
 
 export default function SignUp() {
@@ -14,7 +14,11 @@ export default function SignUp() {
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("student");
   const [errorMessage, setErrorMessage] = useState<string | undefined>("");
-
+  const validatePassword = (password: string) => {
+    const criteria =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
+    return criteria.test(password);
+  };
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newPassword = e.target.value;
     setPassword(newPassword);

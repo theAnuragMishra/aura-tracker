@@ -1,4 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
+import jwt from "jsonwebtoken";
+import { getCurrentSession } from "./auth";
 
 export function createSupabaseClient() {
   return createClient(
@@ -7,14 +9,19 @@ export function createSupabaseClient() {
   );
 }
 
-export function createSupabaseClientJWT() {
+export async function createSupabaseClientJWT() {
+  const { user } = await getCurrentSession();
   return createClient(
     process.env.SUPABASE_URL!,
     process.env.SUPABASE_ANON_KEY!,
     {
       global: {
         fetch: async (url, options = {}) => {
-          const token = "abcd";
+          const token = jwt.sign(
+            { id: user!.id },
+            process.env.SUPABASE_JWT_SECRET!,
+            { expiresIn: "10m" }
+          );
           const headers = new Headers(options?.headers);
           headers.set("Authorization", `Bearer ${token}`);
 

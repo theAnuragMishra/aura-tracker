@@ -1,5 +1,6 @@
 "use server";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 import { createSupabaseClient } from "./supabase-client";
 import { redirect } from "next/navigation";
 import { generateRandomUsername, validatePassword } from "./utils";
@@ -11,27 +12,52 @@ import {
   invalidateSession,
   deleteSessionTokenCookie,
 } from "./auth";
+import { createClient } from "@supabase/supabase-js";
 
 export async function handleLogin(email: string, password: string) {
-  const supabase = createSupabaseClient();
+  const token = jwt.sign({ email }, process.env.SUPABASE_JWT_SECRET!, {
+    expiresIn: "10m",
+  });
+  const supabase_jwt = createClient(
+    process.env.SUPABASE_URL!,
+    process.env.SUPABASE_ANON_KEY!,
+    {
+      global: {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    }
+  );
 
-  const { data: userData, error } = await supabase
+  const { data: userData, error } = await supabase_jwt
     .from("users")
     .select("password_hash, id")
     .eq("email", email);
 
   if (error) {
+    console.error(error);
     throw new Error("Unexpected error");
   }
 
   const password_hash = userData[0].password_hash;
+  const id = userData[0].id;
 
   const match = await bcrypt.compare(password, password_hash);
   if (match) {
-    const token = generateSessionToken();
-    const session = await createSession(token, userData[0].id);
+    const token_id = jwt.sign({ user_id: id }, process.env.SUPABASE_JWT_SECRET!, {
+      expiresIn: "10m",
+    });
+
+
+    const session_token = generateSessionToken();
+    const session = await createSession(
+      token_id,
+      session_token,
+      userData[0].id
+    );
     if (session) {
-      await setSessionTokenCookie(token, session!.expiresAt);
+      await setSessionTokenCookie(session_token, session!.expiresAt);
     } else {
       throw new Error("Unexpected error");
     }
@@ -61,9 +87,14 @@ export async function handleSignup(
 
   const password_hash = await bcrypt.hash(password, 10);
   const supabase = createSupabaseClient();
-  const { error } = await supabase
-    .from("users")
-    .insert({ email, password_hash, role, username });
+  const { error } = await supabase.from("users").insert({
+    email,
+    password_hash,
+    raw_user_meta_data: {
+      username,
+      role,
+    },
+  });
 
   if (error) {
     throw new Error("Error signing up, try again");

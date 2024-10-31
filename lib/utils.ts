@@ -1,4 +1,7 @@
-import { createSupabaseClient } from "./supabase-client";
+import {
+  createSupabaseClient,
+  createSupabaseClientJWT,
+} from "./supabase-client";
 
 export const generateRandomUsername = async () => {
   const supabase = createSupabaseClient();
@@ -13,10 +16,12 @@ export const generateRandomUsername = async () => {
     )}`;
 
     const { data, error } = await supabase
-      .from("users")
+      .from("profiles")
       .select("username")
       .eq("username", username);
+
     if (error) {
+      console.error(error);
       throw new Error("couldn't generate a username");
     }
     if (!data![0]) {
@@ -26,7 +31,7 @@ export const generateRandomUsername = async () => {
 };
 
 export async function getUserDetails(user: { id: number }) {
-  const supabase = createSupabaseClient();
+  const supabase = await createSupabaseClientJWT();
   const { data, error } = await supabase
     .from("users")
     .select("*")

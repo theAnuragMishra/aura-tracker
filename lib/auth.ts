@@ -6,9 +6,10 @@ import { sha256 } from "@oslojs/crypto/sha2";
 import { cookies } from "next/headers";
 import { cache } from "react";
 
-import { createSupabaseClient } from "./supabase-client";
+import { createSupabaseClientJWT } from "./supabase-client";
 
 import { Google } from "arctic";
+import { createClient } from "@supabase/supabase-js";
 
 export const google = new Google(
   process.env.GOOGLE_CLIENT_ID!,
@@ -25,10 +26,23 @@ export function generateSessionToken(): string {
 
 export async function createSession(
   token: string,
+  session_token: string,
   userId: number
 ): Promise<Session | void> {
-  const supabase = createSupabaseClient();
-  const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
+  const supabase = createClient(
+    process.env.SUPABASE_URL!,
+    process.env.SUPABASE_ANON_KEY!,
+    {
+      global: {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    }
+  );
+  const sessionId = encodeHexLowerCase(
+    sha256(new TextEncoder().encode(session_token))
+  );
   const session: Session = {
     id: sessionId,
     userId,
@@ -41,6 +55,7 @@ export async function createSession(
     expires_at: session.expiresAt,
   });
   if (error) {
+    console.error(error);
     console.log("error while creating session");
     return;
   }
@@ -51,7 +66,7 @@ export async function validateSessionToken(
   token: string
 ): Promise<SessionValidationResult> {
   const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
-  const supabase = createSupabaseClient();
+  const supabase = await createSupabaseClientJWT();
   const { data } = await supabase
     .from("user_sessions")
     .select("id, user_id, expires_at, users!inner(id)")
@@ -107,7 +122,7 @@ export const getCurrentSession = cache(
   }
 );
 export async function invalidateSession(sessionId: string): Promise<void> {
-  const supabase = createSupabaseClient();
+  const supabase = await createSupabaseClientJWT();
   const { error } = await supabase
     .from("user_sessions")
     .delete()

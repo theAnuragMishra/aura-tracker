@@ -6,10 +6,10 @@ export default async function Layout({
 }: {
   children: React.ReactNode;
 }) {
-  const { session } = await getCurrentSession();
-  if (!session) {
-    redirect("/login");
-  }
+  // const { session } = await getCurrentSession();
+  // if (!session) {
+  //   redirect("/login");
+  // }
   return (
     <div className="flex-grow p-6 md:overflow-y-auto md:p-12">{children}</div>
   );
