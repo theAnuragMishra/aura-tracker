@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 
-import { handleLogin } from "../../lib/actions";
+import { handleLogin } from "../../../lib/actions";
 import { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { useRouter } from "next/navigation";
@@ -17,7 +17,7 @@ export default function Login() {
 
     try {
       await handleLogin(email, password);
-      console.log("logged in")
+      console.log("logged in");
       router.push("/");
     } catch (error) {
       if (error instanceof Error) {

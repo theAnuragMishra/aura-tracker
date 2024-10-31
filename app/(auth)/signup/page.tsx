@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { handleSignup } from "../../lib/actions";
+import { handleSignup } from "../../../lib/actions";
 
 import { FcGoogle } from "react-icons/fc";
 
