@@ -25,6 +25,20 @@ export const generateRandomUsername = async () => {
   }
 };
 
+export async function getUserDetails(user: { id: number }) {
+  const supabase = createSupabaseClient();
+  const { data, error } = await supabase
+    .from("users")
+    .select("*")
+    .eq("id", user.id);
+  if (error) {
+    throw new Error("error finding user");
+  }
+  if (data[0]) {
+    return data[0];
+  }
+}
+
 export const validatePassword = (password: string) => {
   const criteria =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;

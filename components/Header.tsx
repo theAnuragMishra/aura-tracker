@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { handleLogout } from "../../lib/actions";
+import { handleLogout } from "@/lib/actions";
 
 const Header: FC = () => {
   return (

@@ -74,6 +74,10 @@ export async function validateSessionToken(
       .delete()
       .eq("id", session.id);
 
+    if (error) {
+      //todo
+    }
+
     return { session: null, user: null };
   }
   if (Date.now() >= session.expiresAt.getTime() - 1000 * 60 * 60 * 24 * 15) {
@@ -83,6 +87,10 @@ export async function validateSessionToken(
       .from("user_sessions")
       .update({ expires_at: session.expiresAt })
       .eq("id", session.id);
+
+    if (error) {
+      //todo
+    }
   }
   return { session, user };
 }
@@ -104,6 +112,10 @@ export async function invalidateSession(sessionId: string): Promise<void> {
     .from("user_sessions")
     .delete()
     .eq("id", sessionId);
+
+  if (error) {
+    //todo
+  }
 }
 
 export async function setSessionTokenCookie(

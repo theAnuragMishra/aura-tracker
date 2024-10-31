@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import Header from "../components/Header2";
+import Header from "@/components/Header2";
 
 interface Course {
   name: string;
