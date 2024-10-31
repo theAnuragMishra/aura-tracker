@@ -1,6 +1,6 @@
 "use client";
 import { FC, useState } from "react";
-import Header from "../components/Header2";
+import Header from "@/components/Header2";
 
 interface Resource {
   id: number;
