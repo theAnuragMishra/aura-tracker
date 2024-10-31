@@ -1,6 +1,5 @@
 import {
   createSupabaseClient,
-  createSupabaseClientJWT,
 } from "./supabase-client";
 
 export const generateRandomUsername = async () => {
@@ -9,11 +8,10 @@ export const generateRandomUsername = async () => {
   const nouns = ["Lion", "Falcon", "Tiger", "Panda", "Wolf"];
 
   while (true) {
-    const username = `${
-      adjectives[Math.floor(Math.random() * adjectives.length)]
-    }_${nouns[Math.floor(Math.random() * nouns.length)]}_${Math.floor(
-      Math.random() * 10000
-    )}`;
+    const username = `${adjectives[Math.floor(Math.random() * adjectives.length)]
+      }_${nouns[Math.floor(Math.random() * nouns.length)]}_${Math.floor(
+        Math.random() * 10000
+      )}`;
 
     const { data, error } = await supabase
       .from("profiles")
@@ -31,12 +29,13 @@ export const generateRandomUsername = async () => {
 };
 
 export async function getUserDetails(user: { id: number }) {
-  const supabase = await createSupabaseClientJWT();
+  const supabase = createSupabaseClient();
   const { data, error } = await supabase
-    .from("users")
+    .from("profiles")
     .select("*")
     .eq("id", user.id);
   if (error) {
+    console.error(error)
     throw new Error("error finding user");
   }
   if (data[0]) {

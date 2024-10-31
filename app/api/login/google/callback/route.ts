@@ -85,7 +85,7 @@ export async function GET(request: Request): Promise<Response> {
     .eq("google_id", googleUserId);
 
   if (error) {
-    console.error("88" + error);
+    console.error(error);
   }
 
   const existingUser = data![0];
@@ -124,7 +124,7 @@ export async function GET(request: Request): Promise<Response> {
     .select();
 
   if (error1) {
-    console.error("error1" + error);
+    console.error(error1);
   }
   const token_id = jwt.sign(
     { user_id: data1![0].id },

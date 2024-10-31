@@ -6,7 +6,7 @@ import { sha256 } from "@oslojs/crypto/sha2";
 import { cookies } from "next/headers";
 import { cache } from "react";
 
-import { createSupabaseClientJWT } from "./supabase-client";
+import jwt from "jsonwebtoken"
 
 import { Google } from "arctic";
 import { createClient } from "@supabase/supabase-js";
@@ -66,22 +66,37 @@ export async function validateSessionToken(
   token: string
 ): Promise<SessionValidationResult> {
   const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
-  const supabase = await createSupabaseClientJWT();
-  const { data } = await supabase
-    .from("user_sessions")
-    .select("id, user_id, expires_at, users!inner(id)")
-    .eq("id", sessionId);
+  const token_id = jwt.sign({ session_id: sessionId }, process.env.SUPABASE_JWT_SECRET!, {
+    expiresIn: "10m",
+  }); const supabase = createClient(
+    process.env.SUPABASE_URL!,
+    process.env.SUPABASE_ANON_KEY!,
+    {
+      global: {
+        headers: {
+          Authorization: `Bearer ${token_id}`,
+        },
+      },
+    }
+  );
 
-  if (data![0] === null) {
+  const { data, error } = await supabase
+    .from("user_sessions")
+    .select("id, user_id, expires_at")
+    .eq("id", sessionId);
+  if (error) { console.log("error validating session"); console.error(error) }
+  if (!data![0]) {
+
+    console.log("no session found")
     return { session: null, user: null };
   }
   const session: Session = {
     id: data![0].id,
     userId: data![0].user_id,
-    expiresAt: new Date(data![0].expires_at * 1000),
+    expiresAt: new Date(data![0].expires_at),
   };
   const user: User = {
-    id: data![0].users.id,
+    id: data![0].user_id,
   };
   if (Date.now() >= session.expiresAt.getTime()) {
     const { error } = await supabase
@@ -122,7 +137,19 @@ export const getCurrentSession = cache(
   }
 );
 export async function invalidateSession(sessionId: string): Promise<void> {
-  const supabase = await createSupabaseClientJWT();
+  const token_id = jwt.sign({ session_id: sessionId }, process.env.SUPABASE_JWT_SECRET!, {
+    expiresIn: "10m",
+  }); const supabase = createClient(
+    process.env.SUPABASE_URL!,
+    process.env.SUPABASE_ANON_KEY!,
+    {
+      global: {
+        headers: {
+          Authorization: `Bearer ${token_id}`,
+        },
+      },
+    }
+  );
   const { error } = await supabase
     .from("user_sessions")
     .delete()
