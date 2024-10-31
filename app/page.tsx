@@ -4,8 +4,6 @@ import Link from "next/link";
 
 export default async function Home() {
   const { session, user } = await getCurrentSession();
-  console.log("this is session")
-  console.log(session)
 
   let userData;
   if (session) {
