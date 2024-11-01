@@ -1,7 +1,5 @@
 "use client";
-import { FC } from "react";
 import Link from "next/link";
-import Header from "@/components/Header2";
 
 interface Announcement {
   id: number;
@@ -69,10 +67,9 @@ const projects: Project[] = [
   },
 ];
 
-const CoursePage: FC = () => {
+export default function Course() {
   return (
     <>
-      <Header />
       <div className="flex min-h-screen bg-[#0d0e22] font-sans">
         <aside className="w-60 bg-[#24253a] text-white p-4">
           <h2 className="text-xl font-semibold mb-4 pl-3">Course Menu</h2>
@@ -148,6 +145,4 @@ const CoursePage: FC = () => {
       </div>
     </>
   );
-};
-
-export default CoursePage;
+}
