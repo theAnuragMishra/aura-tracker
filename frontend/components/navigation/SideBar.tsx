@@ -26,7 +26,7 @@ export default async function SideBar() {
         </div> */}
       </Link>
       <div className="flex grow flex-row justify-between space-x-2 md:flex-col md:space-x-0 md:space-y-2">
-        <NavLinks userData={userData} />
+        <NavLinks role={userData.role} />
         <div className="hidden h-auto w-full grow rounded-md md:block"></div>
         <button
           onClick={handleLogout}

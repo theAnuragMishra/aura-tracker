@@ -75,13 +75,13 @@ export default function Course() {
           <h2 className="text-xl font-semibold mb-4 pl-3">Course Menu</h2>
           <ul className="list-disc pl-5">
             <li className="mb-2 pl-1">
-              <a href="#announcements">Announcements</a>
+              <Link href="#announcements">Announcements</Link>
             </li>
             <li className="mb-2 pl-1">
-              <a href="#assignments">Assignments</a>
+              <Link href="#assignments">Assignments</Link>
             </li>
             <li className="mb-2 pl-1">
-              <a href="#projects">Projects</a>
+              <Link href="#projects">Projects</Link>
             </li>
             <li className="mb-2 pl-1">
               <Link href="/course_material">Course Material</Link>

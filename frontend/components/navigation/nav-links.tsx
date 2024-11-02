@@ -6,32 +6,22 @@ import clsx from "clsx";
 
 import { MdDashboard } from "react-icons/md";
 import { IoChatbubblesSharp, IoPersonCircle } from "react-icons/io5";
+import { FaBook, FaCalendarCheck } from "react-icons/fa";
 
-export default function NavLinks(props: {
-  userData: {
-    id: number;
-    created_at: Date;
-    username: string;
-    full_name: string;
-    avatar_url: string;
-    role: string;
-  };
-}) {
+export default function NavLinks({ role }: { role: string }) {
   const pathname = usePathname();
 
-  const links = [
-    { name: "Dashboard", href: "/dashboard", icon: MdDashboard },
 
-    { name: "Chat", href: "/chat", icon: IoChatbubblesSharp },
-    { name: "Course", href: "/course", icon: IoChatbubblesSharp },
-    {
-      name: "Course Material",
-      href: "/course_material",
-      icon: IoChatbubblesSharp,
-    },
-    { name: "Courses", href: "/courses", icon: IoChatbubblesSharp },
-    { name: "Profile", href: props.userData.username, icon: IoPersonCircle },
-  ];
+  const links = [
+    { name: "Dashboard", href: "/dashboard", icon: MdDashboard, include: true },
+    { name: "Chat", href: "/chat", icon: IoChatbubblesSharp, include: true },
+    { name: "Courses", href: "/courses", icon: FaBook, include: true },
+    { name: "Attendance", href: "/attendance", icon: FaCalendarCheck, include: role === "student" || role === "professor" },
+    { name: "Profile", href: "/profile", icon: IoPersonCircle, include: true },
+
+  ].filter(item => item.include);
+
+
 
   return (
     <>
