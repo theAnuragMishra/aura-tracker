@@ -1,6 +1,5 @@
 "use client";
 import Link from "next/link";
-import Header from "@/components/Header2";
 
 interface Course {
   name: string;
@@ -39,7 +38,6 @@ const courses: Course[] = [
 export default function Courses() {
   return (
     <>
-      <Header />
       <div className="flex flex-col items-center h-screen bg-[#0d0e22] font-sans overflow-hidden">
         <div className="text-5xl mb-8 pt-10 pb-5 text-white">My Courses</div>
         <div className="flex flex-wrap justify-center gap-8">

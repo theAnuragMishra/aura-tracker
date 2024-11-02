@@ -1,7 +1,5 @@
 "use client";
-import { FC } from "react";
 import Link from "next/link";
-import Header from "@/components/Header2";
 
 interface Announcement {
   id: number;
@@ -69,22 +67,21 @@ const projects: Project[] = [
   },
 ];
 
-const CoursePage: FC = () => {
+export default function Course() {
   return (
     <>
-      <Header />
       <div className="flex min-h-screen bg-[#0d0e22] font-sans">
         <aside className="w-60 bg-[#24253a] text-white p-4">
           <h2 className="text-xl font-semibold mb-4 pl-3">Course Menu</h2>
           <ul className="list-disc pl-5">
             <li className="mb-2 pl-1">
-              <a href="#announcements">Announcements</a>
+              <Link href="#announcements">Announcements</Link>
             </li>
             <li className="mb-2 pl-1">
-              <a href="#assignments">Assignments</a>
+              <Link href="#assignments">Assignments</Link>
             </li>
             <li className="mb-2 pl-1">
-              <a href="#projects">Projects</a>
+              <Link href="#projects">Projects</Link>
             </li>
             <li className="mb-2 pl-1">
               <Link href="/course_material">Course Material</Link>
@@ -148,6 +145,4 @@ const CoursePage: FC = () => {
       </div>
     </>
   );
-};
-
-export default CoursePage;
+}

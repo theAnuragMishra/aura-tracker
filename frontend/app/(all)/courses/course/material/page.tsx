@@ -1,6 +1,5 @@
 "use client";
-import { FC, useState } from "react";
-import Header from "@/components/Header2";
+import { useState } from "react";
 
 interface Resource {
   id: number;
@@ -72,7 +71,7 @@ const initialCompletionStatus: Record<number, boolean> = {
   3: false,
 };
 
-const CourseMaterial: FC = () => {
+export default function CourseMaterial() {
   const [expandedModule, setExpandedModule] = useState<number | null>(null);
   const [expandedChapter, setExpandedChapter] = useState<number | null>(null);
   const [completionStatus, setCompletionStatus] = useState<
@@ -96,7 +95,6 @@ const CourseMaterial: FC = () => {
 
   return (
     <>
-      <Header />
       <div className="flex min-h-screen bg-[#0d0e22] font-sans text-gray-200">
         <aside className="w-56 bg-[#24253a] p-5 text-white">
           <h2 className="text-xl font-semibold mb-6">Course Menu</h2>
@@ -244,6 +242,4 @@ const CourseMaterial: FC = () => {
       </div>
     </>
   );
-};
-
-export default CourseMaterial;
+}

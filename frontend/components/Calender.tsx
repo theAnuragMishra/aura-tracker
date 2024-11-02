@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useState } from "react";
+import { useState } from "react";
 
 interface Task {
   id: number;
@@ -8,7 +8,7 @@ interface Task {
   color: string;
 }
 
-const Calendar: FC = () => {
+export default function Calendar() {
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
   const [tasks, setTasks] = useState<{ [key: string]: Task[] }>({});
@@ -94,9 +94,8 @@ const Calendar: FC = () => {
             <div
               key={day}
               onClick={() => handleDayClick(day)}
-              className={`relative border border-gray-600 bg-gray-600 bg-opacity-70 p-4 text-center rounded-md h-20 cursor-pointer ${
-                selectedDay === day ? "border-blue-400 shadow-lg shadow-blue-400" : ""
-              }`}
+              className={`relative border border-gray-600 bg-gray-600 bg-opacity-70 p-4 text-center rounded-md h-20 cursor-pointer ${selectedDay === day ? "border-blue-400 shadow-lg shadow-blue-400" : ""
+                }`}
             >
               <span className="text-xl">{day}</span>
               <div className="flex gap-1 mt-2">
@@ -163,4 +162,3 @@ const Calendar: FC = () => {
   );
 };
 
-export default Calendar;
