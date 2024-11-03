@@ -67,17 +67,9 @@ export default function AttendanceUI({
           <h2 className="text-4xl text-yellow-400 mb-5">
             Attendance for {selectedCourse} on {selectedDate}
           </h2>
-          <ul className="grid grid-cols-2 w-full gap-5">
-            <li className="text-lg w-full flex justify-between">
-              <span className="w-[500px]">Name</span>
-              <span className="w-[50px]">Status</span>
-            </li>
-            <li className="text-lg w-full flex justify-between">
-              <span className="w-[500px]">Name</span>
-              <span className="w-[50px]">Status</span>
-            </li>
+          <ul className="columns-2 w-full gap-5 border p-2 [column-rule:1px_solid_theme(borderColor.DEFAULT)]">
             {attendanceRecords.map((record) => (
-              <li key={record.student_id} className="text-lg flex">
+              <li key={record.student_id} className="text-lg p-2 flex">
                 <div className="w-full">{record.student_name}</div>
                 <button
                   onClick={() => handleToggleAttendance(record.student_id)}
@@ -92,7 +84,7 @@ export default function AttendanceUI({
             onClick={() => {
               handleSave(selectedDate, attendanceRecords);
             }}
-            className="text-2xl rounded-sm bg-white px-4 py-1 text-black mt-5"
+            className="text-2xl w-full rounded-sm bg-white px-4 py-1 text-black mt-5"
           >
             Save
           </button>
