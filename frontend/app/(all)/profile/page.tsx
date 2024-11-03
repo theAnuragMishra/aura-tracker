@@ -21,6 +21,7 @@ export default async function Profile({
       <div>{userData.avatar_url ? <Image src={userData.avatar_url} alt="profile picture" width="100" height="100" className="rounded-full" /> : <FaUser className="w-[100px] h-[100px] rounded-full" />}</div>
       <h1 className="text-2xl my-4">{userData.full_name || userData.username}</h1>
       <div>{userData.role ? <div>Role: {userData.role} </div> : <div className={clsx("", { "": toHighlightRole === 'true' })}>Select Role: <RoleInput /></div>}</div>
+      <div>Aura: {userData.aura}</div>
     </div>
   )
 }
