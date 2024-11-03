@@ -68,7 +68,7 @@ export async function handleLogin(email: string, password: string) {
 
 export async function handleSignup(
   email: string,
-  role: string,
+  role: "student" | "professor" | "rewarder",
   password: string
 ) {
   if (!validatePassword(password)) {
@@ -97,6 +97,8 @@ export async function handleSignup(
   });
 
   if (error) {
+    console.log("hi/" + error)
+    console.error(error);
     throw new Error("Error signing up, try again");
   }
 }
