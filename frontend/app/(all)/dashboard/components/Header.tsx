@@ -1,7 +1,4 @@
-import { FC } from "react";
-import { handleLogout } from "@/lib/actions";
-
-const Header: FC = () => {
+export default function Header() {
   return (
     <div className="bg-gray-800 text-white p-4 flex justify-between items-center">
       <div className="flex items-center space-x-3">
@@ -15,12 +12,6 @@ const Header: FC = () => {
           <span className="ml-2">/ 100</span>
         </div>
       </div>
-
-      <button onClick={handleLogout} className="bg-purple-600 p-2 rounded-md">
-        Logout{" "}
-      </button>
     </div>
   );
-};
-
-export default Header;
+}

@@ -11,12 +11,12 @@
   "dependencies": {
     "@oslojs/crypto": "^1.0.1",
     "@oslojs/encoding": "^1.1.0",
-    "@supabase/ssr": "^0.5.1",
     "@supabase/supabase-js": "^2.46.1",
     "@types/jsonwebtoken": "^9.0.7",
     "arctic": "^2.2.1",
     "axios": "^1.7.7",
     "bcrypt": "^5.1.1",
+    "clsx": "^2.1.1",
     "jsonwebtoken": "^9.0.2",
     "next": "^15.0.1",
     "react": "19.0.0-rc-69d4b800-20241021",

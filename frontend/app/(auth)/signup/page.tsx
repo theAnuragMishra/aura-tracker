@@ -8,11 +8,13 @@ import { FcGoogle } from "react-icons/fc";
 
 import { useRouter } from "next/navigation";
 
+type role = "student" | "rewarder" | "professor";
+
 export default function SignUp() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState("student");
+  const [role, setRole] = useState<role>("student");
   const [errorMessage, setErrorMessage] = useState<string | undefined>("");
   const validatePassword = (password: string) => {
     const criteria =
@@ -76,7 +78,7 @@ export default function SignUp() {
                 value="student"
                 name="role"
                 checked={role === "student"}
-                onChange={(e) => setRole(e.target.value)}
+                onChange={(e) => setRole(e.target.value as role)}
                 type="radio"
                 required
                 className=""
@@ -89,7 +91,7 @@ export default function SignUp() {
                 value="professor"
                 name="role"
                 checked={role === "professor"}
-                onChange={(e) => setRole(e.target.value)}
+                onChange={(e) => setRole(e.target.value as role)}
                 type="radio"
                 required
                 className=""
@@ -100,7 +102,7 @@ export default function SignUp() {
               <input
                 value="rewarder"
                 name="role"
-                onChange={(e) => setRole(e.target.value)}
+                onChange={(e) => setRole(e.target.value as role)}
                 checked={role === "rewarder"}
                 type="radio"
                 required
