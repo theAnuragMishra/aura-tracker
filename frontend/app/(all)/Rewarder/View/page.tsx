@@ -10,7 +10,7 @@ const View = () => {
   useEffect(() => {
     const fetchCoupons = async () => {
       try {
-        const response=await fetch('http://localhost:5173/coupons');
+        const response=await fetch('http://localhost:5173/api/rewards');
         if (!response.ok) {
             throw new Error("Network response was not ok");
         }
