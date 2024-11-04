@@ -14,13 +14,20 @@ import { Bar } from "react-chartjs-2";
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 const Rewarder = () => {
+  const currentWeekCouponsCreated = [5, 10, 15, 20, 8, 12, 18];
+
   const rewardData = {
-    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+    labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
     datasets: [
       {
         label: "Rewards Collected",
         data: [20, 15, 30, 25, 40, 35, 50, 45, 55, 60, 50, 70],
         backgroundColor: "#4CAF50",
+      },
+      {
+        label: "Coupons Created This Week",
+        data: currentWeekCouponsCreated,
+        backgroundColor: "#FF9800", 
       },
     ],
   };
@@ -51,20 +58,6 @@ const Rewarder = () => {
           <button className="bg-purple-600 px-4 py-2 rounded text-white">Logout</button>
         </header>
 
-        {/* <div className="grid grid-cols-4 gap-4">
-          <div className="bg-gray-800 p-4 rounded text-center">
-            <p>Previous Coupons</p>
-          </div>
-          <div className="bg-gray-800 p-4 rounded text-center">
-            <p>Coupon 1</p>
-          </div>
-          <div className="bg-gray-800 p-4 rounded text-center">
-            <p>Coupon 2</p>
-          </div>
-          <div className="bg-gray-800 p-4 rounded text-center">
-            <p>Coupon 3</p>
-          </div>
-        </div> */}
         <div className="grid grid-cols-4 gap-4">
           <div className="bg-gray-800 p-4 rounded text-center">
             <p>Coupon Created</p>
@@ -78,7 +71,7 @@ const Rewarder = () => {
 
         <div className="bg-gray-800 p-6 rounded-lg">
           <h2 className="text-lg font-semibold mb-4 text-center">Rewards Collected Data</h2>
-          <Bar data={rewardData} options={{ responsive: true, plugins: { legend: { display: false } } }} />
+          <Bar data={rewardData} options={{ responsive: true, plugins: { legend: { display: true } } }} />
         </div>
       </main>
     </div>
