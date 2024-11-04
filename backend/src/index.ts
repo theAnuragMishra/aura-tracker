@@ -1,8 +1,26 @@
 import express from "express";
 import cors from "cors";
+import { createServer } from "http";
+import { Server } from "socket.io";
+
+//interfaces
+
+import {
+  ServerToClientEvents,
+  ClientToServerEvents,
+  InterServerEvents,
+  SocketData,
+} from "./config/interfaces";
+
 // import dotenv from "dotenv";
 import "dotenv/config";
+
+// route imports
 import profRoutes from "./professor/prof.routes";
+import chatRoutes from "./chat/chat.routes";
+
+import { connectDB } from "./config/db";
+import setupSocket from "./config/socket";
 
 const app = express();
 // dotenv.config();
@@ -18,11 +36,30 @@ app.use(
 );
 
 app.use("/api/prof", profRoutes);
+app.use("/api/chat", chatRoutes);
 
 app.get("/", (req, res) => {
   res.send("Hello, Aura Stars!");
 });
 
-app.listen(PORT, () => {
+connectDB();
+
+const server = createServer(app);
+
+const io = new Server<
+  ClientToServerEvents,
+  ServerToClientEvents,
+  InterServerEvents,
+  SocketData
+>(server, {
+  cors: {
+    origin: "http://localhost:3000",
+    credentials: true,
+  },
+});
+
+setupSocket(io);
+
+server.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
