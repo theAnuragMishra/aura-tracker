@@ -19,7 +19,7 @@ const Coupons = () => {
     e.preventDefault();
     try {
         console.log(coupon);
-        const response = await axios.post('http://localhost:5173/coupons', coupon);
+        const response = await axios.post('http://localhost:5173/api/rewards', coupon);
         console.log(response);
         alert(`Coupon created: ${response.data.code}`);
         setCoupon({
