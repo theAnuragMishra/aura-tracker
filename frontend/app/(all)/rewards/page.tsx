@@ -65,11 +65,11 @@ const RewardsList = () => {
       <h1 className="text-3xl font-bold text-center text-purple-600 mb-6">
         Rewards
       </h1>
-      <div className="flex flex-wrap justify-center">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {rewards.map((reward) => (
           <li
             key={reward.id}
-            className="flex flex-col items-center justify-center max-w-xs m-4 p-4 border border-gray-300 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 bg-white"
+            className="flex flex-col items-center justify-center p-4 border border-gray-300 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-200 bg-white"
           >
             <h2 className="text-2xl font-bold text-black mb-2 text-center">
               {reward.name}
