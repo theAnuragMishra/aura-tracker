@@ -1,10 +1,9 @@
+"use client";
+import { useEffect, useState, FormEvent, useMemo } from "react";
+import { io, Socket } from "socket.io-client";
+import axios from "axios";
 
-"use client"
-import React, { useEffect, useMemo, useState, FormEvent } from 'react';
-import { io, Socket } from 'socket.io-client';
-import axios from 'axios'; 
-
-const Chat: React.FC = () => {
+export default function Chat() {
   const socket: Socket = useMemo(
     () =>
       io("http://localhost:5173", {
@@ -21,8 +20,12 @@ const Chat: React.FC = () => {
 
   const fetchMessages = async (roomName: string) => {
     try {
-      const response = await axios.get(`http://localhost:5173/messages/${roomName}`);
-      const messagesData = response.data.map((msg: { message: string }) => msg.message);
+      const response = await axios.get(
+        `http://localhost:5173/api/chat/${roomName}`
+      );
+      const messagesData = response.data.map(
+        (msg: { message: string }) => msg.message
+      );
       setMessages(messagesData);
     } catch (error) {
       console.error("Error fetching messages:", error);
@@ -43,13 +46,13 @@ const Chat: React.FC = () => {
       socket.emit("join-room", roomName);
       setRoom(roomName);
       setRoomName("");
-      fetchMessages(roomName); 
+      fetchMessages(roomName);
     }
   };
 
   useEffect(() => {
     socket.on("connect", () => {
-      setSocketId(socket.id);
+      setSocketId(socket.id!);
       console.log("connected", socket.id);
     });
 
@@ -75,14 +78,19 @@ const Chat: React.FC = () => {
         <p className="text-center text-lg text-purple-600">{socketID}</p>
 
         <form onSubmit={joinRoomHandler} className="mt-6">
-          <label className="block text-sm font-medium text-white mb-1">Join Room</label>
+          <label className="block text-sm font-medium text-white mb-1">
+            Join Room
+          </label>
           <input
             className="w-full p-2 mb-4 border border-gray-600 rounded bg-gray-700 text-white"
             placeholder="Room ID"
             value={roomName}
             onChange={(e) => setRoomName(e.target.value)}
           />
-          <button className="w-full p-2 bg-purple-600 rounded hover:bg-purple-500 transition duration-200" type="submit">
+          <button
+            className="w-full p-2 bg-purple-600 rounded hover:bg-purple-500 transition duration-200"
+            type="submit"
+          >
             Join
           </button>
         </form>
@@ -91,25 +99,30 @@ const Chat: React.FC = () => {
       <div className="w-3/4 p-6 bg-gray-800">
         <h1 className="text-center text-2xl mb-4 text-white">Chat Room</h1>
         <form onSubmit={handleSubmit} className="mt-6">
-          <label className="block text-sm font-medium text-white mb-1">Send Message</label>
+          <label className="block text-sm font-medium text-white mb-1">
+            Send Message
+          </label>
           <input
             className="w-full p-2 mb-4 border border-gray-600 rounded bg-gray-700 text-white"
             placeholder="Message"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
           />
-          <button className="w-full p-2 bg-purple-600 rounded hover:bg-purple-500 transition duration-200" type="submit">
+          <button
+            className="w-full p-2 bg-purple-600 rounded hover:bg-purple-500 transition duration-200"
+            type="submit"
+          >
             Send
           </button>
         </form>
         <div className="max-h-64 overflow-y-auto border border-gray-600 rounded p-2 mt-3">
           {messages.map((m, i) => (
-            <p key={i} className="mb-1 text-white">{m}</p>
+            <p key={i} className="mb-1 text-white">
+              {m}
+            </p>
           ))}
         </div>
       </div>
     </div>
   );
-};
-
-export default Chat;
+}
