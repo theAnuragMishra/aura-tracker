@@ -28,6 +28,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const { user } = await getCurrentSession();
+  // console.log("root", user);
   const userData = await getUserDetails(user!);
 
   const token = jwt.sign(userData, process.env.JWT_SECRET!, {

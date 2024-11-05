@@ -1,5 +1,5 @@
 "use client";
-import { createContext, useContext, useEffect, useRef } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { io, Socket } from "socket.io-client";
 
 interface SocketContextProps {
@@ -13,26 +13,27 @@ export const SocketProvider: React.FC<{
   token: string;
 }> = ({ children, token }) => {
   // Get JWT token from your auth context
-  const socket = useRef<Socket | null>(null);
+  const [socket, setSocket] = useState<Socket | null>(null);
 
   useEffect(() => {
     if (token) {
-      socket.current = io("http://localhost:5173", {
+      const newSocket = io("http://localhost:5173", {
         auth: { token },
       });
 
-      socket.current.on("connect", () => {
+      newSocket.on("connect", () => {
         console.log("Connected to Socket.IO server");
+        setSocket(newSocket);
       });
 
       return () => {
-        socket.current?.disconnect();
+        newSocket.disconnect();
       };
     }
-  }, [token]);
+  }, []);
 
   return (
-    <SocketContext.Provider value={{ socket: socket.current }}>
+    <SocketContext.Provider value={{ socket }}>
       {children}
     </SocketContext.Provider>
   );

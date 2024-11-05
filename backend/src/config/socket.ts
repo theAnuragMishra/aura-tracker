@@ -4,7 +4,7 @@ export default function setupSocket(io: any) {
   io.on("connection", (socket: any) => {
     const userId = socket.data.userId;
 
-    // console.log("User Connected", socket.id);
+    console.log("User Connected", socket.id);
 
     socket.on(
       "sendMessage",

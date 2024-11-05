@@ -2,17 +2,19 @@ import { Conversation, Message } from "./message.model";
 
 export async function startConversation(req: any, res: any) {
   const { userA, userB } = req.body;
+  console.log(userA, userB);
+  const participants = [userA, userB].sort();
   if (!userA || !userB) {
     return res.status(400).send({ message: "Two users required" });
   }
   try {
     let conversation = await Conversation.findOne({
-      participants: { $all: [userA, userB] },
+      participants,
     });
 
     if (!conversation) {
       conversation = await Conversation.create({
-        participants: [userA, userB],
+        participants,
         lastUpdated: new Date(),
       });
     }

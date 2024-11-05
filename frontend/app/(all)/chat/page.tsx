@@ -1,8 +1,9 @@
 import { getCurrentSession } from "@/lib/auth";
-import ChatList from "./components/ChatList";
+
 import { getBaseURL, getUserDetails } from "@/lib/utils";
 import jwt from "jsonwebtoken";
 import axios from "axios";
+import ChatUI from "./components/ChatUI";
 
 export default async function Chat() {
   const { user } = await getCurrentSession();
@@ -24,10 +25,7 @@ export default async function Chat() {
 
   return (
     <div className="flex w-full min-h-screen">
-      <div className="flex-[1.5] p-5 bg-gray-800">
-        <ChatList chats={chats} username={userData.username} />
-      </div>
-      <div className="flex-[3] p-5">Column 2</div>
+      <ChatUI chats={chats} username={userData.username} />
     </div>
   );
 }
