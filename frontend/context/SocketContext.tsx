@@ -10,7 +10,7 @@ const SocketContext = createContext<SocketContextProps>({ socket: null });
 
 export const SocketProvider: React.FC<{
   children: React.ReactNode;
-  token: string;
+  token: string | null;
 }> = ({ children, token }) => {
   // Get JWT token from your auth context
   const [socket, setSocket] = useState<Socket | null>(null);

@@ -29,11 +29,14 @@ export default async function RootLayout({
 }>) {
   const { user } = await getCurrentSession();
   // console.log("root", user);
-  const userData = await getUserDetails(user!);
+  let token: string | null = null;
+  if (user) {
+    const userData = await getUserDetails(user!);
 
-  const token = jwt.sign(userData, process.env.JWT_SECRET!, {
-    expiresIn: "24h",
-  });
+    token = jwt.sign(userData, process.env.JWT_SECRET!, {
+      expiresIn: "24h",
+    });
+  }
 
   return (
     <html lang="en">

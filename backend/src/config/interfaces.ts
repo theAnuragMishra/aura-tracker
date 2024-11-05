@@ -20,5 +20,5 @@ export interface SocketData {
 }
 
 export interface SocketWithUserData extends Socket {
-  user?: { id: string; username: string };
+  user?: any;
 }
