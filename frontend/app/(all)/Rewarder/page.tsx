@@ -41,10 +41,13 @@ const Rewarder = () => {
         </div>
         <nav className="space-y-2 mt-2">
           <a href="/Rewarder/View" className="flex items-center text-gray-200 hover:text-white">
-            <span className="material-icons mr-10"></span> View
+            <span className="material-icons mr-10"></span> View Coupons
           </a>
           <a href="/Rewarder/Coupons" className="flex items-center text-gray-200 hover:text-white">
             <span className="material-icons mr-10"></span> Create Coupons
+          </a>
+          <a href="/Rewarder/Edits" className="flex items-center text-gray-200 hover:text-white">
+            <span className="material-icons mr-10"></span> Edit Coupons
           </a>
           <a href="#" className="flex items-center text-gray-200 hover:text-white">
             <span className="material-icons mr-10"></span> History

@@ -1,8 +1,10 @@
 "use client";
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import axios from 'axios';
 
 const Coupons = () => {
+  const router = useRouter();
   const [coupon, setCoupon] = useState({
     code: '',
     auraPointsRequired: '',
@@ -10,34 +12,41 @@ const Coupons = () => {
     expiryDate: '',
   });
 
-  const handleChange = (e: { target: { name: any; value: any; }; }) => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
     setCoupon({ ...coupon, [name]: value });
   };
 
-  const handleSubmit = async (e: { preventDefault: () => void; }) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-        console.log(coupon);
-        const response = await axios.post('http://localhost:5173/api/rewards', coupon);
-        console.log(response);
-        alert(`Coupon created: ${response.data.code}`);
-        setCoupon({
-            code: '',
-            auraPointsRequired: '',
-            benefit: '',
-            expiryDate: '',
-        });
+      console.log(coupon);
+      const response = await axios.post('http://localhost:5173/api/rewards', coupon);
+      console.log(response);
+      alert(`Coupon created: ${response.data.code}`);
+      setCoupon({
+        code: '',
+        auraPointsRequired: '',
+        benefit: '',
+        expiryDate: '',
+      });
     } catch (error) {
-        console.error('Error creating coupon:', error);
-        alert('Error creating coupon. Please try again.');
+      console.error('Error creating coupon:', error);
+      alert('Error creating coupon. Please try again.');
     }
-};
+  };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-4 flex flex-col">
+    <div className="min-h-screen bg-gray-900 text-white p-4 flex flex-col relative">
+      <button
+        onClick={() => router.back()}
+        className="absolute top-4 right-4 bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 transition duration-200"
+      >
+        Back
+      </button>
+
       <h2 className="text-2xl font-bold mb-4">Create Coupon</h2>
-      <form onSubmit={handleSubmit} className="bg-gray-800 p-6 rounded-lg shadow-md">
+      <form onSubmit={handleSubmit} className="bg-gray-800 p-6 rounded-lg shadow-md mt-4">
         <div className="grid grid-cols-1 gap-4">
           <div>
             <label className="block mb-1">Coupon Code</label>
