@@ -2,21 +2,23 @@ import { Conversation, Message } from "../chat/message.model";
 
 export default function setupSocket(io: any) {
   io.on("connection", (socket: any) => {
-    const userId = socket.data.userId;
-
     console.log("User Connected", socket.id);
-
+    const senderId = socket.user.username;
     socket.on(
       "sendMessage",
       async ({ conversationId, content, receiverId }: any) => {
-        const senderId = socket.data.userId;
-
-        const conversation = await Conversation.findById(conversationId);
+        // console.log(senderId);
+        // console.log("message sent");
+        // console.log(conversationId);
+        // console.log(content);
+        // console.log(receiverId);
+        const conversation = await Conversation.findById(conversationId).exec();
         if (
           !conversation ||
           !conversation.participants.includes(senderId) ||
           !conversation.participants.includes(receiverId)
         ) {
+          console.log("conversation not found");
           socket.emit("error", "Invalid conversation");
           return;
         }
@@ -29,6 +31,8 @@ export default function setupSocket(io: any) {
           timestamp: new Date(),
           status: "sent",
         });
+
+        // console.log(typeof message);
 
         await Conversation.findByIdAndUpdate(conversationId, {
           lastMessage: message.content,
@@ -52,7 +56,7 @@ export default function setupSocket(io: any) {
         return;
       }
 
-      if (!conversation.participants.includes(userId)) {
+      if (!conversation.participants.includes(senderId)) {
         socket.emit("error", "Access denied");
         return;
       }

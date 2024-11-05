@@ -31,7 +31,7 @@ export const SocketProvider: React.FC<{
         newSocket.disconnect();
       };
     }
-  }, [socket, token]);
+  }, [token]);
 
   return (
     <SocketContext.Provider value={{ socket }}>
