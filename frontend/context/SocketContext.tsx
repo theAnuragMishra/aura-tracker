@@ -19,6 +19,7 @@ export const SocketProvider: React.FC<{
     if (token) {
       const newSocket = io("http://localhost:5173", {
         auth: { token },
+        withCredentials: true,
       });
 
       newSocket.on("connect", () => {
@@ -30,7 +31,7 @@ export const SocketProvider: React.FC<{
         newSocket.disconnect();
       };
     }
-  }, []);
+  }, [socket, token]);
 
   return (
     <SocketContext.Provider value={{ socket }}>

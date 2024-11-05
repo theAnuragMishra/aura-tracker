@@ -29,7 +29,9 @@ export default function ChatUI({
         />
       </div>
       <div className="flex-[3] p-5">
-        <ChatBox conversationId={conversationId} receiver={receiver} />
+        {conversationId && (
+          <ChatBox conversationId={conversationId} receiver={receiver} />
+        )}
       </div>
     </>
   );
