@@ -20,6 +20,10 @@ export default async function Profile({
   const username = (await params).username;
   const userData = await getUserDetailsByUsername(username);
 
+  if (!userData) {
+    return <div>User not found</div>;
+  }
+
   const handleStartChat = async () => {
     "use server";
     const token = jwt.sign(viewerData, process.env.JWT_SECRET!, {
