@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -32,27 +32,56 @@ const Rewarder = () => {
     ],
   };
 
+  const [checklist, setChecklist] = useState({
+    coupon1: false,
+    coupon2: false,
+    coupon3: false,
+    coupon4: false,
+  });
+
+  const handleCheckboxChange = (e) => {
+    const { name, checked } = e.target;
+    setChecklist({ ...checklist, [name]: checked });
+  };
+
   return (
     <div className="min-h-screen bg-gray-900 text-white p-4 flex">
       <aside className="w-1/5 bg-gray-800 p-4 space-y-4">
         <div className="text-center">
-          <h2 className="mt-2">Admin Name</h2>
+          <h2 className="mt-2 text-xl font-bold">Admin Name</h2>
           <p className="text-sm text-gray-400"></p>
         </div>
         <nav className="space-y-2 mt-2">
           <a href="/Rewarder/View" className="flex items-center text-gray-200 hover:text-white">
-            <span className="material-icons mr-10"></span> View Coupons
+            <span className="material-icons mr-2"></span> View Coupons
           </a>
           <a href="/Rewarder/Coupons" className="flex items-center text-gray-200 hover:text-white">
-            <span className="material-icons mr-10"></span> Create Coupons
+            <span className="material-icons mr-2"></span> Create Coupons
           </a>
           <a href="/Rewarder/Edits" className="flex items-center text-gray-200 hover:text-white">
-            <span className="material-icons mr-10"></span> Edit Coupons
+            <span className="material-icons mr-2"></span> Edit Coupons
           </a>
           <a href="#" className="flex items-center text-gray-200 hover:text-white">
-            <span className="material-icons mr-10"></span> History
+            <span className="material-icons mr-2"></span> History
           </a>
         </nav>
+        <div className="mt-4">
+          <h3 className="text-lg font-semibold mb-2">Coupon Checklist</h3>
+          <div className="space-y-2">
+            {Object.keys(checklist).map((coupon, index) => (
+              <label key={index} className="flex items-center text-gray-200">
+                <input
+                  type="checkbox"
+                  name={coupon}
+                  checked={checklist[coupon]}
+                  onChange={handleCheckboxChange}
+                  className="mr-2 rounded text-purple-600 focus:ring-purple-500"
+                />
+                <span>{`Coupon ${index + 1}`}</span>
+              </label>
+            ))}
+          </div>
+        </div>
       </aside>
 
       <main className="w-4/5 p-6 space-y-6">
