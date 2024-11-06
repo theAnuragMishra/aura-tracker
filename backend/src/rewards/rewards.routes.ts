@@ -57,8 +57,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-
-router.put('/edit/:id', async (req: any, res: any)=> {
+router.put("/edit/:id", async (req: any, res: any) => {
   try {
     const { id } = req.params;
     const updatedData = req.body;
@@ -66,37 +65,35 @@ router.put('/edit/:id', async (req: any, res: any)=> {
     const updatedCoupon = await Coupon.findOneAndUpdate(
       { _id: id },
       updatedData,
-      { new: true } 
+      { new: true }
     );
 
     if (!updatedCoupon) {
-      return res.status(404).json({ error: 'Coupon not found' });
+      return res.status(404).json({ error: "Coupon not found" });
     }
 
-    res.json({ message: 'Coupon updated successfully', coupon: updatedCoupon });
+    res.json({ message: "Coupon updated successfully", coupon: updatedCoupon });
   } catch (error) {
     console.error("Error updating coupon:", error);
 
-    if (error.name === 'CastError') {
-      return res.status(400).json({ error: 'Invalid coupon ID' });
+    if (error) {
+      return res.status(400).json({ error: "Invalid coupon ID" });
     }
 
-    res.status(500).json({ error: 'Failed to update coupon' });
+    res.status(500).json({ error: "Failed to update coupon" });
   }
 });
 
-
-router.delete('/delete/:id', async (req: any, res: any)=> {
+router.delete("/delete/:id", async (req: any, res: any) => {
   try {
-    
     const deletedCoupon = await Coupon.findOneAndDelete({ _id: req.params });
 
     if (!deletedCoupon) {
-      return res.status(404).json({ error: 'Coupon not found' });
+      return res.status(404).json({ error: "Coupon not found" });
     }
-    res.json({ message: 'Coupon deleted successfully' });
+    res.json({ message: "Coupon deleted successfully" });
   } catch (error) {
-    res.status(400).json({ error: 'Failed to delete coupon' });
+    res.status(400).json({ error: "Failed to delete coupon" });
   }
 });
 
