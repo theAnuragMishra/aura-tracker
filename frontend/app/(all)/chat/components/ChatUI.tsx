@@ -71,18 +71,20 @@ export default function ChatUI({
   };
 
   return (
-    <>
-      <div className="flex-[1.5] p-5 bg-gray-800">
+    <div className="flex w-full columns-2">
+      <div className="flex-[1.5] p-5">
+        <div className="text-3xl text-center pb-3 border-b-2">Inbox</div>
         <ChatList
           chats={chats}
           username={username}
           handleClick={handleChatChange}
         />
       </div>
-      <div className="flex-[3] p-5 h-full">
+      <div className="flex-[3] h-full">
         {conversationId && (
-          <div className="flex-col h-full">
-            <ChatBox messages={messages} />
+          <div className="flex-col p-5 h-full items-center justify-center">
+            <div className="mb-3 text-2xl ">{receiver}</div>
+            <ChatBox messages={messages} username={username} />
 
             <div className="mt-3">
               <input
@@ -102,6 +104,6 @@ export default function ChatUI({
           </div>
         )}
       </div>
-    </>
+    </div>
   );
 }
