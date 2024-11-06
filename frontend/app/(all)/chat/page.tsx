@@ -25,7 +25,7 @@ export default async function Chat() {
   console.log(chats);
 
   return (
-    <div className="flex w-full min-h-screen">
+    <div className="flex w-full h-full">
       <ChatUI chats={chats} username={userData.username} />
     </div>
   );

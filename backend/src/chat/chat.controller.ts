@@ -46,3 +46,19 @@ export async function findConversations(req: any, res: any) {
     res.status(500).json({ error: "Failed to load conversations" });
   }
 }
+
+export async function getMessagesForAChat(req: any, res: any) {
+  const conversationId = req.query.conversationId;
+  if (!conversationId) {
+    return res.status(400).send({ message: "user ids required" });
+  }
+
+  try {
+    const messages = await Message.find({ conversationId });
+    // console.log(messages);
+    return res.status(200).json(messages);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send({ message: "internal server error" });
+  }
+}

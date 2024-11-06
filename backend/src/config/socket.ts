@@ -12,6 +12,11 @@ export default function setupSocket(io: any) {
         // console.log(conversationId);
         // console.log(content);
         // console.log(receiverId);
+
+        if (!conversationId || !content || !receiverId) {
+          return;
+        }
+
         const conversation = await Conversation.findById(conversationId).exec();
         if (
           !conversation ||
@@ -62,6 +67,7 @@ export default function setupSocket(io: any) {
       }
 
       socket.join(conversationId);
+      console.log("joined", conversationId);
     });
 
     socket.on("messageDelivered", async ({ messageId }: any) => {
