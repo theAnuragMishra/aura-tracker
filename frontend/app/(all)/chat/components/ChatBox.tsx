@@ -10,9 +10,13 @@ export default function ChatBox({ messages }: { messages: Message[] }) {
   return (
     <div className="h-4/5 overflow-y-auto border border-gray-600 rounded p-2">
       {messages.map((m, i) => (
-        <p key={i} className="mb-1 text-white">
+        <div
+          key={i}
+          className="mb-3 text-white bg-gray-800 w-fit rounded-lg px-3 py-1"
+        >
+          <div className="text-blue-300">{m.senderId}</div>
           {m.content}
-        </p>
+        </div>
       ))}
     </div>
   );

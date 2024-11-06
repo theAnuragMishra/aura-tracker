@@ -84,7 +84,7 @@ export default function ChatUI({
           <div className="flex-col h-full">
             <ChatBox messages={messages} />
 
-            <div>
+            <div className="mt-3">
               <input
                 className="w-full p-2 mb-4 border border-gray-600 rounded bg-gray-700 text-white"
                 placeholder="Message"

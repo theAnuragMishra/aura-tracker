@@ -13,6 +13,7 @@ export async function startConversation(req: any, res: any) {
     });
 
     if (!conversation) {
+      console.log("conversation didn't exist already");
       conversation = await Conversation.create({
         participants,
         lastUpdated: new Date(),
@@ -30,7 +31,7 @@ export async function startConversation(req: any, res: any) {
 
 export async function findConversations(req: any, res: any) {
   const username = req.query.username;
-  console.log(username);
+  // console.log(username);
   if (!username) {
     return res.status(400).json({ error: "Username is required" });
   }

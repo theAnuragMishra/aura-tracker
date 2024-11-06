@@ -1,5 +1,5 @@
 import express from "express";
-import { Message } from "./message.model";
+
 import { verifyUserToken } from "../middleware/verifyUserToken";
 import {
   findConversations,

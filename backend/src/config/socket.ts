@@ -67,7 +67,7 @@ export default function setupSocket(io: any) {
       }
 
       socket.join(conversationId);
-      console.log("joined", conversationId);
+      // console.log("joined", conversationId);
     });
 
     socket.on("messageDelivered", async ({ messageId }: any) => {

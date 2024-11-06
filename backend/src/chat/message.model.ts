@@ -25,6 +25,6 @@ const ConversationSchema = new mongoose.Schema({
   lastUpdated: { type: Date, default: Date.now },
 });
 
-ConversationSchema.index({ participants: 1 }, { unique: true });
+// ConversationSchema.index({ participants: 1 }, { unique: true });
 
 export const Conversation = mongoose.model("Conversation", ConversationSchema);
