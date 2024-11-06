@@ -1,128 +1,32 @@
-"use client";
-import { useEffect, useState, FormEvent, useMemo } from "react";
-import { io, Socket } from "socket.io-client";
+import { getCurrentSession } from "@/lib/auth";
+
+import { getBaseURL, getUserDetails } from "@/lib/utils";
+import jwt from "jsonwebtoken";
 import axios from "axios";
+import ChatUI from "./components/ChatUI";
 
-export default function Chat() {
-  const socket: Socket = useMemo(
-    () =>
-      io("http://localhost:5173", {
-        withCredentials: true,
-      }),
-    []
-  );
+export default async function Chat() {
+  const { user } = await getCurrentSession();
+  const userData = await getUserDetails(user!);
 
-  const [messages, setMessages] = useState<string[]>([]);
-  const [message, setMessage] = useState<string>("");
-  const [room, setRoom] = useState<string>("");
-  const [socketID, setSocketId] = useState<string>("");
-  const [roomName, setRoomName] = useState<string>("");
+  const token = jwt.sign(user!, process.env.JWT_SECRET!, { expiresIn: "24h" });
 
-  const fetchMessages = async (roomName: string) => {
-    try {
-      const response = await axios.get(
-        `http://localhost:5173/api/chat/${roomName}`
-      );
-      const messagesData = response.data.map(
-        (msg: { message: string }) => msg.message
-      );
-      setMessages(messagesData);
-    } catch (error) {
-      console.error("Error fetching messages:", error);
-    }
-  };
+  const response = await axios.get(`${getBaseURL()}/api/chat/conversations/`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    params: {
+      username: userData.username,
+    },
+  });
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (message.trim() && room.trim()) {
-      socket.emit("message", { message, room });
-      setMessage("");
-    }
-  };
-
-  const joinRoomHandler = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (roomName.trim()) {
-      socket.emit("join-room", roomName);
-      setRoom(roomName);
-      setRoomName("");
-      fetchMessages(roomName);
-    }
-  };
-
-  useEffect(() => {
-    socket.on("connect", () => {
-      setSocketId(socket.id!);
-      console.log("connected", socket.id);
-    });
-
-    socket.on("receive-message", (data: { message: string }) => {
-      console.log("Received message:", data);
-      setMessages((prevMessages) => [...prevMessages, data.message]);
-    });
-
-    socket.on("Welcome", (s: string) => {
-      console.log(s);
-    });
-
-    return () => {
-      socket.off("receive-message");
-      socket.disconnect();
-    };
-  }, [socket]);
+  const chats = response.data;
+  console.log("fetched conversations");
+  console.log(chats);
 
   return (
-    <div className="flex h-screen bg-gray-900">
-      <div className="w-1/4 p-6 bg-gray-900">
-        <h1 className="text-center text-2xl text-white mb-4">Your Chat ID</h1>
-        <p className="text-center text-lg text-purple-600">{socketID}</p>
-
-        <form onSubmit={joinRoomHandler} className="mt-6">
-          <label className="block text-sm font-medium text-white mb-1">
-            Join Room
-          </label>
-          <input
-            className="w-full p-2 mb-4 border border-gray-600 rounded bg-gray-700 text-white"
-            placeholder="Room ID"
-            value={roomName}
-            onChange={(e) => setRoomName(e.target.value)}
-          />
-          <button
-            className="w-full p-2 bg-purple-600 rounded hover:bg-purple-500 transition duration-200"
-            type="submit"
-          >
-            Join
-          </button>
-        </form>
-      </div>
-
-      <div className="w-3/4 p-6 bg-gray-800">
-        <h1 className="text-center text-2xl mb-4 text-white">Chat Room</h1>
-        <form onSubmit={handleSubmit} className="mt-6">
-          <label className="block text-sm font-medium text-white mb-1">
-            Send Message
-          </label>
-          <input
-            className="w-full p-2 mb-4 border border-gray-600 rounded bg-gray-700 text-white"
-            placeholder="Message"
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-          />
-          <button
-            className="w-full p-2 bg-purple-600 rounded hover:bg-purple-500 transition duration-200"
-            type="submit"
-          >
-            Send
-          </button>
-        </form>
-        <div className="max-h-64 overflow-y-auto border border-gray-600 rounded p-2 mt-3">
-          {messages.map((m, i) => (
-            <p key={i} className="mb-1 text-white">
-              {m}
-            </p>
-          ))}
-        </div>
-      </div>
+    <div className="flex w-full h-full">
+      <ChatUI chats={chats} username={userData.username} />
     </div>
   );
 }

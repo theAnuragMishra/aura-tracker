@@ -1,15 +1,18 @@
 import express from "express";
-import { messageModel } from "./message.model";
+
+import { verifyUserToken } from "../middleware/verifyUserToken";
+import {
+  findConversations,
+  getMessagesForAChat,
+  startConversation,
+} from "./chat.controller";
 
 const router = express.Router();
 
-router.get("/:room", async (req, res) => {
-  try {
-    const messages = await messageModel.find({ room: req.params.room });
-    res.json(messages);
-  } catch (error) {
-    if (error instanceof Error) res.status(500).send(error.message);
-  }
-});
+router.get("/conversations", verifyUserToken, findConversations);
+
+router.post("/start", verifyUserToken, startConversation);
+
+router.get("/messages", verifyUserToken, getMessagesForAChat);
 
 export default router;

@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import { createServer } from "http";
 import { Server } from "socket.io";
+import jwt from "jsonwebtoken";
 
 //interfaces
 
@@ -10,6 +11,7 @@ import {
   ClientToServerEvents,
   InterServerEvents,
   SocketData,
+  SocketWithUserData,
 } from "./config/interfaces";
 
 // import dotenv from "dotenv";
@@ -58,6 +60,19 @@ const io = new Server<
     origin: "http://localhost:3000",
     credentials: true,
   },
+});
+
+io.use((socket: SocketWithUserData, next) => {
+  const token = socket.handshake.auth.token;
+  if (!token) {
+    return next(new Error("Authentication error"));
+  }
+
+  jwt.verify(token, process.env.JWT_SECRET!, (err: any, decoded: any) => {
+    if (err) return next(new Error("Authentication error"));
+    socket.user = decoded;
+    next();
+  });
 });
 
 setupSocket(io);
