@@ -62,7 +62,7 @@ export default function ChatUI({
   const handleChatChange = async (conversationId: string, receiver: string) => {
     setConversationId(conversationId);
     setReceiver(receiver);
-    console.log("chat changed");
+    // console.log("chat changed");
     if (socket) {
       socket.emit("joinConversation", conversationId);
     }

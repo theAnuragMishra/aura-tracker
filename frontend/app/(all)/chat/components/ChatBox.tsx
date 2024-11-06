@@ -30,7 +30,7 @@ export default function ChatBox({
   }, [messages])
 
   return (
-    <div className="h-[430px] overflow-y-auto border border-gray-600 rounded p-2">
+    <div className="h-[430px] flex flex-col justify-end overflow-y-auto border border-gray-600 rounded p-2">
       {messages.length ? (
         messages.map((m, i) => (
           <div
