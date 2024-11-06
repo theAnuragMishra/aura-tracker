@@ -2,7 +2,7 @@ import { Conversation, Message } from "./message.model";
 
 export async function startConversation(req: any, res: any) {
   const { userA, userB } = req.body;
-  console.log(userA, userB);
+  // console.log(userA, userB);
   const participants = [userA, userB].sort();
   if (!userA || !userB) {
     return res.status(400).send({ message: "Two users required" });
