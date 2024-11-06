@@ -21,8 +21,8 @@ export default async function Chat() {
   });
 
   const chats = response.data;
-  console.log("fetched conversations");
-  console.log(chats);
+  // console.log("fetched conversations");
+  // console.log(chats);
 
   return (
     <div className="flex w-full h-full">

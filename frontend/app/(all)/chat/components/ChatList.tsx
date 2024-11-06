@@ -18,7 +18,7 @@ export default function ChatList({
             onClick={() => {
               handleClick(item._id, receiver!);
             }}
-            className="h-[50px] border-y-2 px-3 py-3 w-full text-left"
+            className="h-[50px] border-b-2 px-3 py-3 w-full text-left"
             key={index}
           >
             {receiver}
