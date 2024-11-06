@@ -40,6 +40,11 @@ export async function handleLogin(email: string, password: string) {
     throw new Error("Unexpected error");
   }
 
+  // console.log(userData);
+  if (!userData[0]) {
+    throw new Error("You don't have an account with that email :/")
+  }
+
   const password_hash = userData[0].password_hash;
   const id = userData[0].id;
 

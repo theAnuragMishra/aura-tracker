@@ -37,7 +37,7 @@ export default function ChatUI({
     if (socket) {
       socket.on("message", (data) => {
         setMessages((prevMessages) => [...prevMessages, data]);
-        console.log("message received");
+        // console.log("message received");
       });
 
       return () => {
@@ -46,7 +46,8 @@ export default function ChatUI({
     }
   }, [socket]);
 
-  const sendMessage = () => {
+  const sendMessage = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
     if (message && socket) {
       socket.emit("sendMessage", {
         conversationId,
@@ -55,6 +56,7 @@ export default function ChatUI({
       });
       setMessage("");
     }
+    // console.log("message sent")
   };
 
   const handleChatChange = async (conversationId: string, receiver: string) => {
@@ -86,7 +88,8 @@ export default function ChatUI({
             <div className="mb-3 text-2xl ">{receiver}</div>
             <ChatBox messages={messages} username={username} />
 
-            <div className="mt-3">
+            <form onSubmit={sendMessage} className="mt-3">
+
               <input
                 className="w-full p-2 mb-4 border border-gray-600 rounded bg-gray-700 text-white"
                 placeholder="Message"
@@ -94,13 +97,12 @@ export default function ChatUI({
                 onChange={(e) => setMessage(e.target.value)}
               />
               <button
-                onClick={sendMessage}
                 className="w-full p-2 bg-purple-600 rounded hover:bg-purple-500 transition duration-200"
                 type="submit"
               >
                 Send
               </button>
-            </div>
+            </form>
           </div>
         )}
       </div>
