@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import { useEffect, useRef } from "react";
 
 interface Message {
   conversationId: string;
@@ -15,6 +16,19 @@ export default function ChatBox({
   messages: Message[];
   username: string;
 }) {
+
+  const endRef = useRef<null | HTMLDivElement>(null);
+
+  const scrollToBottom = () => {
+    endRef.current?.scrollIntoView({
+      behavior: "smooth"
+    })
+  }
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages])
+
   return (
     <div className="h-[430px] overflow-y-auto border border-gray-600 rounded p-2">
       {messages.length ? (
@@ -43,6 +57,7 @@ export default function ChatBox({
           <div> Hi</div>
         </div>
       )}
+      <div ref={endRef}></div>
     </div>
   );
 }
