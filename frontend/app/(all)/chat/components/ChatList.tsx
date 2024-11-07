@@ -42,7 +42,7 @@ export default function ChatList({
             <div className="flex justify-between">
               <div className="text-lg">{receiver}</div>
               <div>{formatTime(item.lastUpdated)}</div>   </div>
-            <div className="text-gray-500">{item.lastMessage.slice(0, 40)}{item.lastMessage.length > 40 && "..."}</div>
+            {item.lastMessage && <div className="text-gray-500">{item.lastMessage.slice(0, 40)}{item.lastMessage.length > 40 && "..."}</div>}
 
           </div>
         );
