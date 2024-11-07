@@ -1,10 +1,17 @@
-export default function Leaderboard() {
+import { getCurrentSession } from "@/lib/auth";
+import { getUserDetails } from "@/lib/utils";
+
+export default async function Leaderboard() {
+  const { user } = await getCurrentSession();
+  const userData = await getUserDetails(user!);
   const demo = [
     { name: "Anurag", aura: 100000000 },
     { name: "Vaishnavi", aura: -10 },
     { name: "Sakshi", aura: 10 },
   ];
-
+  if (!["student", "professor"].includes(userData.role)) {
+    return <div>Set your goals somewhere else, alright?</div>;
+  }
   return (
     <div className="w-full min-h-screen flex items-center justify-center bg-foreground">
       <div className="h-auto w-1/3 m-auto text-black p-6 rounded-lg shadow-lg bg-white">
