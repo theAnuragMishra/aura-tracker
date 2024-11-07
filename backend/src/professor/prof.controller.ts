@@ -1,7 +1,7 @@
 import { createSupabaseClient } from "../utils/supabase";
 import jwt from "jsonwebtoken";
 
-export async function getAttendanceDates(req: any, res: any) {
+export async function getCourses(req: any, res: any) {
   // console.log("came here");
   const user = req.user;
   const id = user.id;
@@ -10,9 +10,7 @@ export async function getAttendanceDates(req: any, res: any) {
   });
   const supabase = createSupabaseClient(token);
 
-  const { data, error } = await supabase.rpc("get_unique_attendance_dates", {
-    prof_id: id,
-  });
+  const { data, error } = await supabase.from("courses").select("*").eq("professor_id", id);
 
   // console.log(data);
   if (error) {
@@ -20,6 +18,29 @@ export async function getAttendanceDates(req: any, res: any) {
     return res.status(500).send({ message: "couldn't get attendance dates" });
   }
   return res.status(200).send(data);
+}
+
+export async function getDates(req: any, res: any) {
+  const user = req.user;
+  const id = user.id;
+  const course_id = req.query.course_id;
+  const token = jwt.sign({ id }, process.env.SUPABASE_JWT_SECRET!, {
+    expiresIn: "10m",
+  });
+  const supabase = createSupabaseClient(token);
+
+  const { data, error } = await supabase.rpc("get_unique_attendance_dates", {
+    prof_id: id,
+    course: course_id,
+  });
+
+  console.log(data);
+  if (error) {
+    console.error(error);
+    return res.status(500).send({ message: "couldn't get attendance dates" });
+  }
+  return res.status(200).send(data);
+
 }
 
 export async function getAttendanceForDate(req: any, res: any) {
@@ -41,7 +62,7 @@ export async function getAttendanceForDate(req: any, res: any) {
 
   if (error) {
     console.error(error);
-    return res.status(500).send({ message: "couldn't get attendance dates" });
+    return res.status(500).send({ message: "couldn't get attendance for the date" });
   }
   return res.status(200).send(data);
 }

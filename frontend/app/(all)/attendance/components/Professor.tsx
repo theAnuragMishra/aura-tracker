@@ -7,7 +7,7 @@ export default async function Professor({ token }: { token: string }) {
   let data;
   try {
     const response = await axios.get(
-      `${getBaseURL()}/api/prof/attendance/dates`,
+      `${getBaseURL()}/api/prof/attendance/courses`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -22,7 +22,7 @@ export default async function Professor({ token }: { token: string }) {
   return (
     <div>
       <div className="mb-5 text-6xl">Attendance</div>
-      <AttendanceUI dates={data} />
+      <AttendanceUI courses={data} />
     </div>
   );
 }
