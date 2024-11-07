@@ -1,12 +1,26 @@
-'use client'
+import { getBaseURL } from "@/lib/utils"
+import axios from "axios"
+import SelectSubject from "./SubjectSelect";
 
-import { useState } from "react";
+export default async function Student({ token }: { token: string }) {
+  let data: { course_id: number, courses: { course_name: string }, profiles: { full_name: string } }[] | null = null;
+  try {
+    const response = await axios.get(`${getBaseURL()}/api/student/courses`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+    data = response.data;
 
-export default function Attendance() {
+    // console.log(response.data);
+  }
+  catch (error) {
+    console.error(error);
+  }
 
-  const [date, setDate] = useState(Date.now());
-  return <div><h1>Attendance</h1>
-    <input type="date" className="text-black" value={date} onChange={(e) => { setDate(e.target.value) }} />
+  return <div>
+    <h1 className="text-5xl mb-3">Attendance</h1>
+    {data ? <SelectSubject data={data} /> : "Error fetching subjects"}
 
   </div>
 }
