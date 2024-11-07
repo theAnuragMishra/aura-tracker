@@ -65,3 +65,29 @@ export async function updateAttendance(
     console.error(error);
   }
 }
+
+
+export async function getStudentAttendance(course_id: number) {
+  const { user } = await getCurrentSession();
+
+  const token = jwt.sign(user!, process.env.JWT_SECRET!, { expiresIn: "10m" });
+
+  try {
+    const response = await axios.get(
+      "http://localhost:5173/api/student/attendance/",
+      {
+        params: {
+          course_id,
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    // console.log(response.data);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+
+}

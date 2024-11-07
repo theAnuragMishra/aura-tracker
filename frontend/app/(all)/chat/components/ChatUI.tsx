@@ -18,7 +18,7 @@ export default function ChatUI({
   chats,
   username,
 }: {
-  chats: { _id: string; participants: string[]; lastUpdated: Date }[];
+  chats: { _id: string; participants: string[]; lastUpdated: string; lastMessage: string }[];
   username: string;
 }) {
   const [conversationId, setConversationId] = useState("");
