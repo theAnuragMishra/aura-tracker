@@ -10,7 +10,10 @@ export async function getCourses(req: any, res: any) {
   });
   const supabase = createSupabaseClient(token);
 
-  const { data, error } = await supabase.from("courses").select("*").eq("professor_id", id);
+  const { data, error } = await supabase
+    .from("courses")
+    .select("*")
+    .eq("professor_id", id);
 
   // console.log(data);
   if (error) {
@@ -34,13 +37,12 @@ export async function getDates(req: any, res: any) {
     course: course_id,
   });
 
-  console.log(data);
+  // console.log(data);
   if (error) {
     console.error(error);
     return res.status(500).send({ message: "couldn't get attendance dates" });
   }
   return res.status(200).send(data);
-
 }
 
 export async function getAttendanceForDate(req: any, res: any) {
@@ -62,7 +64,9 @@ export async function getAttendanceForDate(req: any, res: any) {
 
   if (error) {
     console.error(error);
-    return res.status(500).send({ message: "couldn't get attendance for the date" });
+    return res
+      .status(500)
+      .send({ message: "couldn't get attendance for the date" });
   }
   return res.status(200).send(data);
 }
@@ -97,6 +101,74 @@ export async function updateAttendance(req: any, res: any) {
     return res
       .status(200)
       .send({ message: "Some records couldn't be updated! Contact admin" });
+  }
+  return res.status(200).send({ message: "Success!" });
+}
+
+export async function createModule(req: any, res: any) {
+  if (
+    !req.body.moduleName ||
+    !req.body.course_id ||
+    !req.body.questions.length ||
+    !req.body.questions[0].question
+  ) {
+    return res.status(400).send({ message: "Please send correct data" });
+  }
+
+  const user = req.user;
+  const id = user.id;
+  const token = jwt.sign({ id }, process.env.SUPABASE_JWT_SECRET!, {
+    expiresIn: "10m",
+  });
+  const supabase = createSupabaseClient(token);
+  let errorWhileUpdating = false;
+
+  const module_name = req.body.moduleName;
+  const course_id = req.body.course_id;
+  const aura = req.body.aura ? req.body.aura : 100;
+
+  const description = req.body.moduleDesc;
+
+  const { data: moduleData, error: moduleError } = await supabase
+    .from("modules")
+    .insert({ course_id, module_name, description, aura_change: aura })
+    .select();
+  if (moduleError) {
+    console.log(moduleError);
+    return res.status(500).send({ message: "couldn't create module" });
+  }
+  const module_id = moduleData[0].id;
+  const questions = req.body.questions;
+
+  questions.forEach(async (item: any) => {
+    const question_text = item.question;
+    if (!question_text) return;
+    const { data, error } = await supabase
+      .from("questions")
+      .insert({ module_id, question_text })
+      .select();
+    if (error) {
+      errorWhileUpdating = true;
+      return;
+    }
+    const question_id = data[0].id;
+    item.options.forEach(async (option: any, index: number) => {
+      const option_text = option;
+      if (!option_text) return;
+      const is_correct = item.correct == index;
+      const { error } = await supabase
+        .from("options")
+        .insert({ question_id, option_text, is_correct });
+      if (error) {
+        errorWhileUpdating = true;
+      }
+    });
+  });
+
+  if (errorWhileUpdating) {
+    return res
+      .status(200)
+      .send({ message: "Something failed but not everything" });
   }
   return res.status(200).send({ message: "Success!" });
 }

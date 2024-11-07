@@ -52,7 +52,7 @@ export async function getAttendanceData(date: string, course_id: number) {
         },
       }
     );
-    console.log(response.data);
+    // console.log(response.data);
     return response.data;
   } catch (error) {
     console.log(error);
