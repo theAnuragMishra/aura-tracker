@@ -48,6 +48,10 @@ export async function saveUserName(username: string) {
 }
 
 export async function uploadAvatar(filePath: string, file: File) {
+  if (file.size > 5 * 1024 * 1024) {
+    throw new Error("file size exceeded");
+  }
+
   const { user } = await getCurrentSession();
 
   const supabase = await createSupabaseClientJWT();
