@@ -41,10 +41,12 @@ export default async function Attempt({
 
   return (
     <div>
-      {data && (
+      {data ? (
         <div>
           <Questions data={data} />
         </div>
+      ) : (
+        <div className="text-5xl">No such module!</div>
       )}
     </div>
   );

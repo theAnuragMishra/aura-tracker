@@ -155,6 +155,30 @@ export async function evaluate(req: any, res: any) {
 
   const correct_answers = data;
 
+  const { error: student_module_error } = await supabase
+    .from("student_module")
+    .insert({
+      student_id: id,
+      module_id,
+      score: correct_answers,
+    });
+
+  if (student_module_error) {
+    console.error(error);
+  }
+
+  const { error: student_question_error } = await supabase.rpc(
+    "insert_student_answers",
+    {
+      student_id: id,
+      answers,
+    }
+  );
+
+  if (student_question_error) {
+    console.log(student_question_error);
+  }
+
   const finalAnswers = await Promise.all(
     answers.map(async (item: any) => {
       const { data: answerData, error: answerError } = await supabase

@@ -74,6 +74,7 @@ export default function Questions({ data }: { data: ModuleData }) {
                   }
                 )}
               >
+                <span className="mr-3">{["a", "b", "c", "d"][i]}.</span>
                 {option.option_text}
               </div>
             ))}

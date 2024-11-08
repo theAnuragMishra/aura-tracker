@@ -136,7 +136,7 @@ export async function createModule(req: any, res: any) {
     questions,
   };
 
-  console.log(module_data);
+  // console.log(module_data);
 
   const { data, error } = await supabase.rpc("insert_module_data", {
     module_data,

@@ -63,7 +63,9 @@ export default async function Profile({
         <div>Role: {userData.role} </div>
       </div>
       <div>Aura: {userData.aura}</div>
-      <StartChat handleClick={handleStartChat} />
+      {viewerData.username !== username && (
+        <StartChat handleClick={handleStartChat} />
+      )}
     </div>
   );
 }
