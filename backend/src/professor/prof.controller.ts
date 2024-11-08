@@ -121,54 +121,35 @@ export async function createModule(req: any, res: any) {
     expiresIn: "10m",
   });
   const supabase = createSupabaseClient(token);
-  let errorWhileUpdating = false;
 
   const module_name = req.body.moduleName;
-  const course_id = req.body.course_id;
+  const course_id = Number(req.body.course_id);
   const aura = req.body.aura ? req.body.aura : 100;
-
   const description = req.body.moduleDesc;
-
-  const { data: moduleData, error: moduleError } = await supabase
-    .from("modules")
-    .insert({ course_id, module_name, description, aura_change: aura })
-    .select();
-  if (moduleError) {
-    console.log(moduleError);
-    return res.status(500).send({ message: "couldn't create module" });
-  }
-  const module_id = moduleData[0].id;
   const questions = req.body.questions;
 
-  questions.forEach(async (item: any) => {
-    const question_text = item.question;
-    if (!question_text) return;
-    const { data, error } = await supabase
-      .from("questions")
-      .insert({ module_id, question_text })
-      .select();
-    if (error) {
-      errorWhileUpdating = true;
-      return;
-    }
-    const question_id = data[0].id;
-    item.options.forEach(async (option: any, index: number) => {
-      const option_text = option;
-      if (!option_text) return;
-      const is_correct = item.correct == index;
-      const { error } = await supabase
-        .from("options")
-        .insert({ question_id, option_text, is_correct });
-      if (error) {
-        errorWhileUpdating = true;
-      }
-    });
+  const module_data = {
+    module_name,
+    module_desc: description,
+    course_id,
+    aura_change: aura,
+    questions,
+  };
+
+  console.log(module_data);
+
+  const { data, error } = await supabase.rpc("insert_module_data", {
+    module_data,
   });
 
-  if (errorWhileUpdating) {
+  if (error) {
+    console.error(error);
     return res
-      .status(200)
-      .send({ message: "Something failed but not everything" });
+      .status(500)
+      .send({ message: "couldn't created module, server error" });
   }
-  return res.status(200).send({ message: "Success!" });
+  // console.log(data);
+  return res
+    .status(200)
+    .send({ message: `Success! your module id is ${data}` });
 }
