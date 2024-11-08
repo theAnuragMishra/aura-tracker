@@ -64,3 +64,32 @@ export async function getModules(course_id: number) {
     console.error(error);
   }
 }
+
+export async function evaluate(
+  answers: { question_id: number; option_id: number | null }[],
+  module_id: number
+) {
+  // console.log(answers);
+  const { user } = await getCurrentSession();
+
+  const token = jwt.sign(user!, process.env.JWT_SECRET!, { expiresIn: "10m" });
+  try {
+    const response = await axios.post(
+      `${getBaseURL()}/api/student/evaluate`,
+      JSON.stringify({
+        answers,
+        module_id,
+      }),
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    // console.log(response.data);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+}

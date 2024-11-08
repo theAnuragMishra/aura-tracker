@@ -1,6 +1,7 @@
 "use client";
 
 import { getModules } from "@/lib/moduleActions";
+import Link from "next/link";
 import { useState } from "react";
 
 export default function SelectSubject({
@@ -50,7 +51,9 @@ export default function SelectSubject({
         <p>Modules!</p>
         {modules &&
           modules.map((item, index) => (
-            <div key={index}>{item.module_name}</div>
+            <Link href={`/module/student/attempt/${item.id}`} key={index}>
+              {item.module_name}
+            </Link>
           ))}
       </div>
     </div>
