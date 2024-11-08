@@ -142,7 +142,17 @@ export async function evaluate(req: any, res: any) {
     return res.status(500).send({ message: "internal error" });
   }
 
-  const aura_change = auraPerQuestion * data;
+  const aura_change = Math.round(auraPerQuestion * data);
+
+  const { error: auraUpdateError } = await supabase
+    .from("profiles")
+    .update({ aura: aura_change })
+    .eq("id", id);
+
+  if (auraUpdateError) {
+    console.error(auraUpdateError);
+  }
+
   const correct_answers = data;
 
   const finalAnswers = await Promise.all(

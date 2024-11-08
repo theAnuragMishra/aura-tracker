@@ -34,7 +34,7 @@ export default async function Module() {
 
   return (
     <div>
-      <h1>Solve questions, earn Aura!</h1>
+      <h1 className="text-4xl mb-4">Solve questions, earn Aura!</h1>
       {data ? <SelectSubject data={data} /> : "Error fetching subject"}
     </div>
   );

@@ -36,7 +36,7 @@ export default function SelectSubject({
   return (
     <div>
       <select
-        className="text-black w-fit px-2 py-1 mb-2"
+        className="text-black w-fit px-2 py-1 mb-2 rounded-md"
         onChange={handleChange}
         value={subject}
       >
@@ -48,13 +48,19 @@ export default function SelectSubject({
         ))}
       </select>
       <div>
-        <p>Modules!</p>
-        {modules &&
-          modules.map((item, index) => (
-            <Link href={`/module/student/attempt/${item.id}`} key={index}>
-              {item.module_name}
-            </Link>
-          ))}
+        {modules && <p className="text-2xl mb-1">Modules!</p>}
+        <div className="flex flex-col">
+          {modules &&
+            modules.map((item, index) => (
+              <Link
+                href={`/module/student/attempt/${item.id}`}
+                key={index}
+                className="text-blue-400 text-xl"
+              >
+                {index + 1}. {item.module_name}
+              </Link>
+            ))}
+        </div>
       </div>
     </div>
   );
