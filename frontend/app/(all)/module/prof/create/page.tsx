@@ -10,6 +10,7 @@ export default function Create() {
     { question: string; options: string[]; correct: string }[]
   >([{ question: "", options: ["", "", "", ""], correct: "0" }]);
   const [moduleName, setModuleName] = useState("");
+  const [course_id, set_course_id] = useState("");
   const [moduleDesc, setModuleDesc] = useState("");
   const [aura, setAura] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -49,7 +50,10 @@ export default function Create() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+    if (!course_id) {
+      setErrorMessage("Enter a course id");
+      return;
+    }
     if (!moduleName) {
       setErrorMessage("Enter a name for the module");
       return;
@@ -86,8 +90,8 @@ export default function Create() {
     });
     if (cant) return;
     try {
-      await createModule(moduleName, moduleDesc, 1, questions, aura);
-      router.push("/module");
+      await createModule(moduleName, moduleDesc, course_id, questions, aura);
+      router.push("/module/prof");
     } catch (error) {
       if (error instanceof Error) setErrorMessage(error.message);
       console.error(error);
@@ -102,6 +106,17 @@ export default function Create() {
         onSubmit={handleSubmit}
         className="flex flex-col justify-center items-center w-1/2"
       >
+        <label htmlFor="course_id"></label>
+        <input
+          type="text"
+          id="course_id"
+          onChange={(e) => {
+            setErrorMessage("");
+            set_course_id(e.target.value);
+          }}
+          className="mb-3 text-black py-1 px-2 rounded-md text-lg w-1/3"
+          placeholder="Enter course id"
+        />
         <label htmlFor="module_name"></label>
         <input
           value={moduleName}

@@ -1,14 +1,17 @@
-"use server"
+"use server";
 import { getCurrentSession } from "./auth";
 import axios from "axios";
-import jwt from "jsonwebtoken"
+import jwt from "jsonwebtoken";
 import { revalidatePath } from "next/cache";
+import { getBaseURL } from "./utils";
+
+//prof
 
 export async function createModule(
   moduleName: string,
   moduleDesc: string,
-  course_id: number,
-  questions: { question: string, options: string[], correct: string }[],
+  course_id: string,
+  questions: { question: string; options: string[]; correct: string }[],
   aura: string
 ) {
   const { user } = await getCurrentSession();
@@ -23,7 +26,7 @@ export async function createModule(
         moduleDesc,
         course_id,
         questions,
-        aura
+        aura,
       }),
       {
         headers: {
@@ -36,7 +39,28 @@ export async function createModule(
     revalidatePath("/module");
   } catch (error) {
     console.error(error);
-    throw new Error("error creating module")
+    throw new Error("error creating module");
   }
 }
 
+//students
+
+export async function getModules(course_id: number) {
+  const { user } = await getCurrentSession();
+
+  const token = jwt.sign(user!, process.env.JWT_SECRET!, { expiresIn: "10m" });
+  try {
+    const response = await axios.get(`${getBaseURL()}/api/student/modules`, {
+      params: {
+        course_id,
+      },
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+  }
+}
