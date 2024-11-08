@@ -46,3 +46,35 @@ export async function saveUserName(username: string) {
   revalidatePath("/profile");
   revalidatePath("/leaderboard");
 }
+
+export async function uploadAvatar(filePath: string, file: File) {
+  const { user } = await getCurrentSession();
+
+  const supabase = await createSupabaseClientJWT();
+  const { error: uploadError } = await supabase.storage
+    .from("avatars")
+    .upload(filePath, file);
+
+  const { data, error } = await supabase.storage
+    .from("avatars")
+    .createSignedUrl(filePath, 60 * 60 * 24 * 365);
+
+  if (error) {
+    console.error(error);
+  }
+
+  const { error: updateError } = await supabase
+    .from("profiles")
+    .update({ avatar_url: data?.signedUrl })
+    .eq("id", user!.id);
+
+  if (updateError) {
+    console.error(updateError);
+  }
+
+  if (uploadError) {
+    throw uploadError;
+  }
+
+  revalidatePath("/profile");
+}

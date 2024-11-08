@@ -15,7 +15,8 @@ export default async function Profile({
 
   const { user } = await getCurrentSession();
   const userData = await getUserDetails(user!);
-  console.log(userData.avatar_url);
+  // console.log(userData.avatar_url);
+
   return (
     <div>
       <div>
