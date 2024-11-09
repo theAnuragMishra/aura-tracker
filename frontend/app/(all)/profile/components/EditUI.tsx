@@ -102,7 +102,7 @@ export default function EditUI({
           )}
           <div>
             <label
-              className="button primary block bg-white text-black rounded-md px-2 py-1 text-center mt-3"
+              className="cursor-pointer button primary block bg-white text-black rounded-md px-2 py-1 text-center mt-3"
               htmlFor="single"
             >
               {uploading ? "Uploading ..." : "Upload"}
