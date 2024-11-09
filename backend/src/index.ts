@@ -25,6 +25,7 @@ import studentRoutes from "./student/student.routes"
 import badgeRoutes from "./badges/badge.routes"
 import { connectDB } from "./config/db";
 import setupSocket from "./config/socket";
+import eventRoutes from "./events/events.routes";
 
 const app = express();
 // dotenv.config();
@@ -44,6 +45,7 @@ app.use("/api/chat", chatRoutes);
 app.use("/api/rewards", rewardRoutes);
 app.use("/api/student", studentRoutes);
 app.use("/api/badges", badgeRoutes);
+app.use("/api/events", eventRoutes);
 
 app.get("/", (req, res) => {
   res.send("Hello, Aura Stars!");
