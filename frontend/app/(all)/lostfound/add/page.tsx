@@ -1,27 +1,22 @@
-"use client"
-import { useState } from 'react';
+"use client";
+import { addItem } from "@/lib/lnfActions";
+import { useState } from "react";
 
 export default function AddItemPage() {
-  const [itemName, setItemName] = useState('');
-  const [owner, setOwner] = useState('');
-  const [imageURL, setImageURL] = useState('');
+  const [itemName, setItemName] = useState("");
+  const [description, setDescription] = useState("");
+  const [imageURL, setImageURL] = useState("");
 
-  const handleSubmit = async (e: { preventDefault: () => void; }) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!itemName) return;
     const newItem = {
       itemName,
-      owner,
-      imageURL, 
+      description,
+      imageURL,
     };
 
-    await fetch('http://localhost:5173/api/items/add', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(newItem),
-    });
-
-    setItemName('');
-    setOwner('');
-    setImageURL('');
+    await addItem(newItem);
   };
 
   return (
@@ -38,9 +33,9 @@ export default function AddItemPage() {
         />
         <input
           type="text"
-          value={owner}
-          onChange={(e) => setOwner(e.target.value)}
-          placeholder="Your Name"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          placeholder="Describe your item"
           className="w-full p-2 rounded bg-slate-200 border border-gray-900 text-black"
           required
         />
@@ -52,7 +47,10 @@ export default function AddItemPage() {
           className="w-full p-2 rounded bg-slate-200 border border-gray-900 text-black"
           required
         />
-        <button type="submit" className="w-full p-2 bg-purple-600 rounded hover:bg-purple-700">
+        <button
+          type="submit"
+          className="w-full p-2 bg-purple-600 rounded hover:bg-purple-700"
+        >
           Add Item
         </button>
       </form>
