@@ -1,12 +1,31 @@
 import { getCurrentSession } from "@/lib/auth";
 import GoalUI from "./components/GoalUI";
 import { getUserDetails } from "@/lib/utils";
-const { user } = await getCurrentSession();
-const userData = await getUserDetails(user!);
+import { createSupabaseClient } from "@/lib/supabase-client";
 
 export default async function Goals() {
-  if (!["student", "professor"].includes(userData.role)) {
-    return <div>Set your goals somewhere else, alright?</div>;
+  const { user } = await getCurrentSession();
+  const userData = await getUserDetails(user!);
+  if (userData.role !== "student") {
+    return (
+      <div>Only students can set goals here, look somewhere else haha :)</div>
+    );
   }
-  return <GoalUI />;
+
+  const supabase = createSupabaseClient();
+
+  const { data, error } = await supabase
+    .from("goals")
+    .select("*")
+    .eq("student_id", user!.id);
+
+  if (error) {
+    return (
+      <div className="text-3xl">
+        Couldn&apos;t fetch goals! Check your connection and try again.
+      </div>
+    );
+  }
+
+  return <GoalUI goals={data} />;
 }

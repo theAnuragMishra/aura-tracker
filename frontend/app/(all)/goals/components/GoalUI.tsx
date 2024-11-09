@@ -2,54 +2,34 @@
 import { useState, ChangeEvent } from "react";
 import { MdDeleteForever } from "react-icons/md";
 import { FaRegCheckSquare, FaRegSquare } from "react-icons/fa";
+import { addGoal, deleteGoal, toggleGoalCompletion } from "@/lib/goalActions";
 
 interface Goal {
-  goal: string;
-  completed: boolean;
-  dateCreated: string;
+  id: number;
+  goal_text: string;
+  created_at: string;
   priority: string;
-  completedTime?: string;
+  completed_at?: string;
 }
 
-export default function GoalUI() {
-  const [allGoals, setGoals] = useState<Goal[]>([]);
+export default function GoalUI({ goals }: { goals: Goal[] }) {
   const [newGoal, setNewGoal] = useState<string>("");
   const [priority, setPriority] = useState<string>("Medium");
 
-  const handleAdd = () => {
+  const handleAdd = async () => {
     if (newGoal.trim()) {
-      const updatedGoals = [
-        ...allGoals,
-        {
-          goal: newGoal,
-          completed: false,
-          dateCreated: new Date().toLocaleString(),
-          priority: priority,
-        },
-      ];
-      setGoals(updatedGoals);
+      await addGoal(newGoal, priority);
       setNewGoal("");
       setPriority("Medium");
     }
   };
 
-  const handleDelete = (index: number) => {
-    const updatedGoals = [...allGoals];
-    updatedGoals.splice(index, 1);
-    setGoals(updatedGoals);
+  const handleDelete = async (id: number) => {
+    await deleteGoal(id);
   };
 
-  const toggleCompletion = (index: number) => {
-    const updatedGoals = [...allGoals];
-    const goal = updatedGoals[index];
-    if (!goal.completed) {
-      goal.completed = true;
-      goal.completedTime = new Date().toLocaleString();
-    } else {
-      goal.completed = false;
-      goal.completedTime = undefined;
-    }
-    setGoals(updatedGoals);
+  const toggleCompletion = async (id: number, index: number) => {
+    await toggleGoalCompletion(id, goals[index].completed_at ? true : false);
   };
 
   const handleGoalChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -61,8 +41,8 @@ export default function GoalUI() {
   };
 
   return (
-    <div className="flex flex-col items-center min-h-screen p-10 bg-[#0d0e22] font-sans">
-      <div className="text-5xl mb-8 pb-5 text-white">Upcoming Goals</div>
+    <div className="flex flex-col items-center h-full p-10 bg-[#0d0e22] font-sans">
+      <div className="text-5xl mb-5 text-white">Upcoming Goals</div>
       <div className="flex justify-center w-full">
         <div className="w-full max-w-6xl">
           <div className="goals-input mb-4">
@@ -107,25 +87,27 @@ export default function GoalUI() {
               </tr>
             </thead>
             <tbody>
-              {allGoals.map((item, index) => (
+              {goals.map((item, index) => (
                 <tr
                   key={index}
                   className="border-b border-gray-600 bg-gray-600 opacity-70"
                 >
                   <td className="py-3 px-4 flex items-center">
-                    {item.completed ? (
+                    {item.completed_at ? (
                       <FaRegCheckSquare
                         className="check-icon cursor-pointer mr-2 text-green-500"
-                        onClick={() => toggleCompletion(index)}
+                        onClick={() => toggleCompletion(item.id, index)}
                       />
                     ) : (
                       <FaRegSquare
                         className="check-icon cursor-pointer mr-2 text-yellow-500"
-                        onClick={() => toggleCompletion(index)}
+                        onClick={() => toggleCompletion(item.id, index)}
                       />
                     )}
-                    <span className={`${item.completed ? "line-through" : ""}`}>
-                      {item.goal}
+                    <span
+                      className={`${item.completed_at ? "line-through" : ""}`}
+                    >
+                      {item.goal_text}
                     </span>
                   </td>
                   <td className="py-3 px-4 border-b border-gray-600">
@@ -142,15 +124,17 @@ export default function GoalUI() {
                     </span>
                   </td>
                   <td className="py-3 px-4 border-b border-gray-600">
-                    {item.dateCreated}
+                    {new Date(item.created_at).toLocaleString()}
                   </td>
                   <td className="py-3 px-4 border-b border-gray-600">
-                    {item.completed ? item.completedTime : "Not completed"}
+                    {item.completed_at
+                      ? new Date(item.completed_at).toLocaleString()
+                      : "Not completed"}
                   </td>
                   <td className="py-3 px-4 border-b border-gray-600">
                     <MdDeleteForever
                       className="icon cursor-pointer text-red-500"
-                      onClick={() => handleDelete(index)}
+                      onClick={() => handleDelete(item.id)}
                     />
                   </td>
                 </tr>
