@@ -22,6 +22,7 @@ import profRoutes from "./professor/prof.routes";
 import chatRoutes from "./chat/chat.routes";
 import rewardRoutes from "./rewards/rewards.routes";
 import studentRoutes from "./student/student.routes"
+import lostfoundRoutes from "./lostfound/lnf.routes";
 import badgeRoutes from "./badges/badge.routes"
 import { connectDB } from "./config/db";
 import setupSocket from "./config/socket";
@@ -44,7 +45,7 @@ app.use("/api/chat", chatRoutes);
 app.use("/api/rewards", rewardRoutes);
 app.use("/api/student", studentRoutes);
 app.use("/api/badges", badgeRoutes);
-
+app.use("api/items",lostfoundRoutes);
 app.get("/", (req, res) => {
   res.send("Hello, Aura Stars!");
 });
