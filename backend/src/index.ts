@@ -21,11 +21,12 @@ import "dotenv/config";
 import profRoutes from "./professor/prof.routes";
 import chatRoutes from "./chat/chat.routes";
 import rewardRoutes from "./rewards/rewards.routes";
-import studentRoutes from "./student/student.routes"
-import badgeRoutes from "./badges/badge.routes"
+import studentRoutes from "./student/student.routes";
+import badgeRoutes from "./badges/badge.routes";
 import { connectDB } from "./config/db";
 import setupSocket from "./config/socket";
 import eventRoutes from "./events/events.routes";
+import adRoutes from "./ads/ad.routes";
 
 const app = express();
 // dotenv.config();
@@ -40,6 +41,7 @@ app.use(
   })
 );
 
+app.use("/api/ads", adRoutes);
 app.use("/api/prof", profRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/rewards", rewardRoutes);
