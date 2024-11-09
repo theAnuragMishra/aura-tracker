@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import { SocketProvider } from "@/context/SocketContext";
+import { getCurrentSession } from "@/lib/auth";
+import { getUserDetails } from "@/lib/utils";
+import jwt from "jsonwebtoken";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -23,12 +27,23 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const { user } = await getCurrentSession();
+  // console.log("root", user);
+  let token: string | null = null;
+  if (user) {
+    const userData = await getUserDetails(user!);
+
+    token = jwt.sign(userData, process.env.JWT_SECRET!, {
+      expiresIn: "24h",
+    });
+  }
+
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <SocketProvider token={token}>{children}</SocketProvider>
       </body>
     </html>
   );

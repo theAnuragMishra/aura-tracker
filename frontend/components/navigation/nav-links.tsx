@@ -4,24 +4,49 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
 
-import { MdDashboard } from "react-icons/md";
+import { MdDashboard, MdLeaderboard } from "react-icons/md";
 import { IoChatbubblesSharp, IoPersonCircle } from "react-icons/io5";
-import { FaBook, FaCalendarCheck } from "react-icons/fa";
+import { FaBook, FaCalendarAlt, FaCalendarCheck } from "react-icons/fa";
+import { GoGoal } from "react-icons/go";
 
 export default function NavLinks({ role }: { role: string }) {
   const pathname = usePathname();
 
-
   const links = [
     { name: "Dashboard", href: "/dashboard", icon: MdDashboard, include: true },
-    { name: "Chat", href: "/chat", icon: IoChatbubblesSharp, include: true },
+    {
+      name: "Chat",
+      href: "/chat",
+      icon: IoChatbubblesSharp,
+      include: role === "student" || role === "professor",
+    },
     { name: "Courses", href: "/courses", icon: FaBook, include: true },
-    { name: "Attendance", href: "/attendance", icon: FaCalendarCheck, include: role === "student" || role === "professor" },
+    {
+      name: "Attendance",
+      href: "/attendance",
+      icon: FaCalendarCheck,
+      include: role === "student" || role === "professor",
+    },
     { name: "Profile", href: "/profile", icon: IoPersonCircle, include: true },
-
-  ].filter(item => item.include);
-
-
+    {
+      name: "Calendar",
+      href: "/calendar",
+      icon: FaCalendarAlt,
+      include: role === "student" || role === "professor",
+    },
+    {
+      name: "Goals",
+      href: "/goals",
+      icon: GoGoal,
+      include: role === "student" || role === "professor",
+    },
+    {
+      name: "Leaderboard",
+      href: "/leaderboard",
+      icon: MdLeaderboard,
+      include: role === "student" || role === "professor",
+    },
+  ].filter((item) => item.include);
 
   return (
     <>
