@@ -3,6 +3,7 @@ import cors from "cors";
 // import dotenv from "dotenv";
 import "dotenv/config";
 import profRoutes from "./professor/prof.routes";
+import eventRoutes from "./events/events.routes";
 
 const app = express();
 // dotenv.config();
@@ -18,6 +19,7 @@ app.use(
 );
 
 app.use("/api/prof", profRoutes);
+app.use("/api/events", eventRoutes);
 
 app.get("/", (req, res) => {
   res.send("Hello, Aura Stars!");

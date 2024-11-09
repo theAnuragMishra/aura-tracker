@@ -89,7 +89,7 @@ const UpcomingEvents: React.FC = () => {
   };
 
   return (
-    <div className="container mx-auto p-6">
+    <div className="container mx-auto">
       <h1 className="text-4xl font-bold text-center text-purple-600 mb-8">
         Upcoming Events
       </h1>
