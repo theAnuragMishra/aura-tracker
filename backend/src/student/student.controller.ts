@@ -91,9 +91,29 @@ export async function getModuleDetails(req: any, res: any) {
   });
   const supabase = createSupabaseClient(token);
 
+  //check if module already solved
+  const { data: msData, error: msError } = await supabase
+    .from("student_module")
+    .select("*")
+    .eq("module_id", module_id)
+    .eq("student_id", id);
+
+  if (msError) {
+    console.log(msError);
+    return;
+  }
+
+  let solved = false;
+
+  if (msData![0]) {
+    solved = true;
+  }
+
   const { data, error } = await supabase
     .from("modules")
-    .select("*, questions!inner(*, options!options_question_id_fkey(*))")
+    .select(
+      "*, questions!inner(*, options!options_question_id_fkey(*), student_question!inner(*))"
+    )
     .eq("id", module_id);
 
   if (error) {
@@ -102,8 +122,8 @@ export async function getModuleDetails(req: any, res: any) {
       .status(500)
       .send({ message: "server error while fetching module data" });
   }
-  // console.log(data[0].questions[0].options);
-  return res.status(200).json(data);
+  // console.log(data[0].questions[0].student_question);
+  return res.status(200).json({ data, solved });
 }
 
 export async function evaluate(req: any, res: any) {
@@ -119,6 +139,22 @@ export async function evaluate(req: any, res: any) {
     expiresIn: "10m",
   });
   const supabase = createSupabaseClient(token);
+
+  //check if module already solved
+  const { data: msData, error: msError } = await supabase
+    .from("student_module")
+    .select("*")
+    .eq("module_id", module_id)
+    .eq("student_id", id);
+
+  if (msError) {
+    console.error(msError);
+    return;
+  }
+
+  if (msData![0]) {
+    return res.status(500).send({ message: "Module already solved!" });
+  }
 
   const { data: auraData, error: auraError } = await supabase
     .from("modules")
