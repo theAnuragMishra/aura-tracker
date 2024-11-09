@@ -21,7 +21,7 @@ export default function EditUI({
 }) {
   // console.log(data);
 
-  const [name, setName] = useState(data.full_name);
+  const [name, setName] = useState(data.full_name || "");
   const [username, setUserName] = useState(data.username);
   const [nameSaving, setNameSaving] = useState(false);
   const [usernameSaving, setUserNameSaving] = useState(false);
