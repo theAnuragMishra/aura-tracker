@@ -8,7 +8,7 @@ interface Task {
   color: string;
 }
 
-export default function Calendar() {
+export default function CalendarUI() {
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
   const [tasks, setTasks] = useState<{ [key: string]: Task[] }>({});
@@ -76,13 +76,22 @@ export default function Calendar() {
   return (
     <div className="p-10">
       <div className="flex justify-between items-center mb-4">
-        <button onClick={handlePreviousMonth} className="bg-purple-600 p-2 rounded-md">
+        <button
+          onClick={handlePreviousMonth}
+          className="bg-purple-600 p-2 rounded-md"
+        >
           Previous
         </button>
         <span className="text-xl font-bold">
-          {new Intl.DateTimeFormat("en-US", { month: "long" }).format(new Date(currentYear, currentMonth))} {currentYear}
+          {new Intl.DateTimeFormat("en-US", { month: "long" }).format(
+            new Date(currentYear, currentMonth)
+          )}{" "}
+          {currentYear}
         </span>
-        <button onClick={handleNextMonth} className="bg-purple-600 p-3 rounded-md">
+        <button
+          onClick={handleNextMonth}
+          className="bg-purple-600 p-3 rounded-md"
+        >
           Next
         </button>
       </div>
@@ -94,8 +103,11 @@ export default function Calendar() {
             <div
               key={day}
               onClick={() => handleDayClick(day)}
-              className={`relative border border-gray-600 bg-gray-600 bg-opacity-70 p-4 text-center rounded-md h-20 cursor-pointer ${selectedDay === day ? "border-blue-400 shadow-lg shadow-blue-400" : ""
-                }`}
+              className={`relative border border-gray-600 bg-gray-600 bg-opacity-70 p-4 text-center rounded-md h-20 cursor-pointer ${
+                selectedDay === day
+                  ? "border-blue-400 shadow-lg shadow-blue-400"
+                  : ""
+              }`}
             >
               <span className="text-xl">{day}</span>
               <div className="flex gap-1 mt-2">
@@ -116,10 +128,18 @@ export default function Calendar() {
       {selectedDay !== null && (
         <div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50">
           <div className=" bg-gray-600 bg-opacity-50 p-6 rounded-lg w-100">
-            <h2 className="text-lg  mb-4 text-gray-200">Tasks for {selectedDay}</h2>
+            <h2 className="text-lg  mb-4 text-gray-200">
+              Tasks for {selectedDay}
+            </h2>
             <ul className="mb-4 ">
-              {(tasks[`${currentYear}-${currentMonth}-${selectedDay}`] || []).map((task) => (
-                <li key={task.id} style={{ color: task.color }} className="flex justify-between mb-2 items-center">
+              {(
+                tasks[`${currentYear}-${currentMonth}-${selectedDay}`] || []
+              ).map((task) => (
+                <li
+                  key={task.id}
+                  style={{ color: task.color }}
+                  className="flex justify-between mb-2 items-center"
+                >
                   <span>{task.text}</span>
                   <button
                     onClick={() => handleDeleteTask(task.id)}
@@ -160,5 +180,4 @@ export default function Calendar() {
       )}
     </div>
   );
-};
-
+}

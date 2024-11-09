@@ -11,7 +11,14 @@ import {
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 const Rewarder = () => {
   const currentWeekCouponsCreated = [5, 10, 15, 20, 8, 12, 18];
@@ -27,7 +34,7 @@ const Rewarder = () => {
       {
         label: "Coupons Created This Week",
         data: currentWeekCouponsCreated,
-        backgroundColor: "#FF9800", 
+        backgroundColor: "#FF9800",
       },
     ],
   };
@@ -52,16 +59,28 @@ const Rewarder = () => {
           <p className="text-sm text-gray-400"></p>
         </div>
         <nav className="space-y-2 mt-2">
-          <a href="/Rewarder/View" className="flex items-center text-gray-200 hover:text-white">
+          <a
+            href="/Rewarder/View"
+            className="flex items-center text-gray-200 hover:text-white"
+          >
             <span className="material-icons mr-2"></span> View Coupons
           </a>
-          <a href="/Rewarder/Coupons" className="flex items-center text-gray-200 hover:text-white">
+          <a
+            href="/Rewarder/Coupons"
+            className="flex items-center text-gray-200 hover:text-white"
+          >
             <span className="material-icons mr-2"></span> Create Coupons
           </a>
-          <a href="/Rewarder/Edits" className="flex items-center text-gray-200 hover:text-white">
+          <a
+            href="/Rewarder/Edits"
+            className="flex items-center text-gray-200 hover:text-white"
+          >
             <span className="material-icons mr-2"></span> Edit Coupons
           </a>
-          <a href="#" className="flex items-center text-gray-200 hover:text-white">
+          <a
+            href="#"
+            className="flex items-center text-gray-200 hover:text-white"
+          >
             <span className="material-icons mr-2"></span> History
           </a>
         </nav>
@@ -87,7 +106,9 @@ const Rewarder = () => {
       <main className="w-4/5 p-6 space-y-6">
         <header className="flex justify-between items-center">
           <h1 className="text-2xl font-semibold">DASHBOARD</h1>
-          <button className="bg-purple-600 px-4 py-2 rounded text-white">Logout</button>
+          <button className="bg-purple-600 px-4 py-2 rounded text-white">
+            Logout
+          </button>
         </header>
 
         <div className="grid grid-cols-4 gap-4">
@@ -102,8 +123,16 @@ const Rewarder = () => {
         </div>
 
         <div className="bg-gray-800 p-6 rounded-lg">
-          <h2 className="text-lg font-semibold mb-4 text-center">Rewards Collected Data</h2>
-          <Bar data={rewardData} options={{ responsive: true, plugins: { legend: { display: true } } }} />
+          <h2 className="text-lg font-semibold mb-4 text-center">
+            Rewards Collected Data
+          </h2>
+          <Bar
+            data={rewardData}
+            options={{
+              responsive: true,
+              plugins: { legend: { display: true } },
+            }}
+          />
         </div>
       </main>
     </div>

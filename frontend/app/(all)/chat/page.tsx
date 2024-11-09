@@ -9,6 +9,10 @@ export default async function Chat() {
   const { user } = await getCurrentSession();
   const userData = await getUserDetails(user!);
 
+  if (!["student", "professor"].includes(userData.role)) {
+    return <div>Mind your business, sir.</div>;
+  }
+
   const token = jwt.sign(user!, process.env.JWT_SECRET!, { expiresIn: "24h" });
 
   const response = await axios.get(`${getBaseURL()}/api/chat/conversations/`, {
