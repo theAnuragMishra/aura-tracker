@@ -8,6 +8,7 @@ const itemSchema = new mongoose.Schema({
   timestamp: { type: Date, default: Date.now },
   imageURL: { type: String, required: true },
   findClaims: [{ type: String }],
+  foundBy: { type: String },
 });
 
 export const Item = mongoose.model("Item", itemSchema);

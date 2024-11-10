@@ -19,7 +19,7 @@ export default async function LostItemsPage() {
   // console.log(response.data);
 
   return (
-    <div className="bg-gray-900 text-white p-8 flex flex-col">
+    <div className="bg-gray-900 text-white p-8 flex flex-col h-full">
       <div className="flex text-2xl mb-4 justify-between">
         <h1>Lost Items</h1>
         <Link
@@ -32,7 +32,7 @@ export default async function LostItemsPage() {
       {response.data.length === 0 ? (
         <p className="text-gray-400">No one has lost anything yet *_*</p>
       ) : (
-        <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <ul className="">
           {response.data.map((item: any, index) => (
             <Item key={index} item={item} username={userData.username} />
           ))}

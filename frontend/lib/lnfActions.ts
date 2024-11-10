@@ -82,3 +82,23 @@ export async function toggleFindClaim(id: number, username: string) {
 
   revalidatePath("/lostfound");
 }
+
+export async function approveFindClaim(item_id: string, approvee: string) {
+  const { user } = await getCurrentSession();
+  const userData = await getUserDetails(user!);
+  const token = jwt.sign(user!, process.env.JWT_SECRET!, {
+    expiresIn: "10m",
+  });
+
+  await axios.post(
+    `${getBaseURL()}/api/lnf/items/approve`,
+    { item_id, approvee, username: userData.username },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  revalidatePath("/lostfound");
+}
