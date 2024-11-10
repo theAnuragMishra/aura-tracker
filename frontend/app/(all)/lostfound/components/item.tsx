@@ -22,7 +22,7 @@ export default function Item({ item, username }: any) {
         <p>Owner: {item.owner}</p>
         <p className="text-red-700">Status: {item.found ? "Found" : "Lost"}</p>
       </div>
-      {!item.found && (
+      {!item.found && !item.owner === username && (
         <button
           className="mt-2 p-2 bg-green-600 rounded hover:bg-green-500"
           onClick={() => handleClick(item._id)}

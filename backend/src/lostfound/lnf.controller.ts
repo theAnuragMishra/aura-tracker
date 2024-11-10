@@ -30,6 +30,11 @@ export async function claimItemFind(req: any, res: any) {
   // console.log(id);
   const username = req.body.username;
   const item = await Item.findOne({ _id: id });
+  if (!item) {
+    return res.status(404).send({ message: "item not found" });
+  }
+  if (item.owner === username)
+    return res.status(400).send({ message: "can't claim your own item" });
   // console.log(item);
   if (item?.findClaims.includes(username)) {
     await Item.updateOne({ _id: id }, { $pull: { findClaims: username } });
