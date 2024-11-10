@@ -11,15 +11,17 @@ export default async function Home() {
   }
 
   return (
-    <main className="flex flex-col gap-8 min-h-screen items-center justify-center font-[family-name:var(--font-geist-sans)] bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 p-8 bg-cover bg-no-repeat" style={{ backgroundImage: 'url("https://wallpaper.dog/large/10859846.jpg")' }}>
+    <main
+      className="flex flex-col gap-8 min-h-screen items-center justify-center font-[family-name:var(--font-geist-sans)] bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 p-8 bg-cover bg-no-repeat"
+      style={{
+        backgroundImage: 'url("https://wallpaper.dog/large/10859846.jpg")',
+      }}
+    >
       <div className="text-white text-4xl font-bold mb-4">
-        {user && <div>Welcome {userData.full_name}!</div>}
+        {user && <div>Welcome {userData.full_name || userData.username}!</div>}
       </div>
       {session ? (
-        <Link
-          href="/dashboard"
-          className="px-6 py-3  text-white  shadow-lg "
-        >
+        <Link href="/dashboard" className="px-6 py-3  text-white  shadow-lg ">
           Go to Dashboard
         </Link>
       ) : (

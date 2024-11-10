@@ -1,9 +1,17 @@
 import express, { Request, Response } from "express";
-import { createItem,  getItems } from "./lnf.controller";
+import {
+  AddItem,
+  approveItemFind,
+  claimItemFind,
+  getItems,
+} from "./lnf.controller";
+import { verifyUserToken } from "../middleware/verifyUserToken";
 
 const router = express.Router();
 
-router.post("/add", (req: Request, res: Response) => createItem(req, res));  
-router.get("/", (req: Request, res: Response) => getItems(req, res));            
+router.post("/items/add", verifyUserToken, AddItem);
+router.post("/items/claim", verifyUserToken, claimItemFind);
+router.get("/items", verifyUserToken, getItems);
+router.post("/items/approve", verifyUserToken, approveItemFind);
 
 export default router;

@@ -1,12 +1,14 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 const itemSchema = new mongoose.Schema({
   itemName: { type: String, required: true },
   owner: { type: String, required: true },
-  lost: { type: Boolean, default: true },
+  description: { type: String },
   found: { type: Boolean, default: false },
   timestamp: { type: Date, default: Date.now },
-  imageURL: { type: String, required: true }, 
+  imageURL: { type: String, required: true },
+  findClaims: [{ type: String }],
+  foundBy: { type: String },
 });
 
-export const Item= mongoose.model('Item', itemSchema);
+export const Item = mongoose.model("Item", itemSchema);
