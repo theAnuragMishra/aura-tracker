@@ -76,9 +76,13 @@ export async function approveItemFind(req: any, res: any) {
 
   const user = req.user;
   const id = user.id;
-  const token = jwt.sign({ id }, process.env.SUPABASE_JWT_SECRET!, {
-    expiresIn: "10m",
-  });
+  const token = jwt.sign(
+    { username: approvee },
+    process.env.SUPABASE_JWT_SECRET!,
+    {
+      expiresIn: "10m",
+    }
+  );
   const supabase = createSupabaseClient(token);
 
   const { error } = await supabase.rpc("update_aura", { approvee });
