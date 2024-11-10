@@ -3,7 +3,7 @@ import { getUserDetails } from "@/lib/utils";
 import Link from "next/link";
 import { IoArrowForwardCircle } from "react-icons/io5";
 
-export default async function Professor() {
+export default async function Professor({ data }: any) {
   const { user } = await getCurrentSession();
   const userData = await getUserDetails(user!);
   return (

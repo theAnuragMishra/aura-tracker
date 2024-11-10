@@ -6,8 +6,7 @@ import clsx from "clsx";
 
 import { MdDashboard, MdLeaderboard } from "react-icons/md";
 import { IoChatbubblesSharp, IoPersonCircle } from "react-icons/io5";
-import { FaBook, FaCalendarAlt, FaCalendarCheck } from "react-icons/fa";
-import { GoGoal } from "react-icons/go";
+import { FaCalendarCheck } from "react-icons/fa";
 
 export default function NavLinks({ role }: { role: string }) {
   const pathname = usePathname();
@@ -20,7 +19,6 @@ export default function NavLinks({ role }: { role: string }) {
       icon: IoChatbubblesSharp,
       include: role === "student" || role === "professor",
     },
-    { name: "Courses", href: "/courses", icon: FaBook, include: true },
     {
       name: "Attendance",
       href: "/attendance",
@@ -28,18 +26,7 @@ export default function NavLinks({ role }: { role: string }) {
       include: role === "student" || role === "professor",
     },
     { name: "Profile", href: "/profile", icon: IoPersonCircle, include: true },
-    {
-      name: "Calendar",
-      href: "/calendar",
-      icon: FaCalendarAlt,
-      include: role === "student" || role === "professor",
-    },
-    {
-      name: "Goals",
-      href: "/goals",
-      icon: GoGoal,
-      include: role === "student" || role === "professor",
-    },
+
     {
       name: "Leaderboard",
       href: "/leaderboard",
