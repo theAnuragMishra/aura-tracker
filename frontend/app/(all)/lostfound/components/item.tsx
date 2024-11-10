@@ -31,6 +31,7 @@ export default function Item({ item, username }: any) {
         <p className="text-xl">
           Lost on: {new Date(item.timestamp).toDateString()}
         </p>
+        <p>{item.description}</p>
         <p className="text-red-700 text-2xl">
           Status: {item.found ? "Found" : "Lost"}
         </p>
@@ -46,21 +47,25 @@ export default function Item({ item, username }: any) {
           </button>
         )}
       </div>
-      <div className="flex flex-col justify-center items-center">
-        {item.findClaims.map((claim: string) => {
-          return item.owner === username ? (
-            <button
-              key={claim}
-              onClick={() => {
-                handleClick2(item._id, claim);
-              }}
-            >
-              {claim}
-            </button>
-          ) : (
-            <p key={claim}>{claim}</p>
-          );
-        })}
+      <div className="flex flex-col items-center">
+        <h1 className="text-2xl mb-2">Find Claims</h1>
+        <div className="justify-center items-center flex">
+          {item.findClaims.map((claim: string) => {
+            return item.owner === username ? (
+              <button
+                className="hover:text-blue-500"
+                key={claim}
+                onClick={() => {
+                  handleClick2(item._id, claim);
+                }}
+              >
+                {claim}
+              </button>
+            ) : (
+              <p key={claim}>{claim}</p>
+            );
+          })}
+        </div>
       </div>
     </li>
   );
