@@ -6,7 +6,7 @@ import {
   getUserDetailsByUsername,
 } from "@/lib/utils";
 import Image from "next/image";
-import { FaUser } from "react-icons/fa";
+import { FaFireAlt, FaUser } from "react-icons/fa";
 import StartChat from "./components/StartChat";
 import axios from "axios";
 
@@ -48,21 +48,26 @@ export default async function Profile({
           <Image
             src={userData.avatar_url}
             alt="profile picture"
-            width="100"
-            height="100"
+            width="150"
+            height="150"
             className="rounded-full"
           />
         ) : (
           <FaUser className="w-[100px] h-[100px] rounded-full" />
         )}
       </div>
-      <h1 className="text-2xl my-4">
+      <h1 className="text-2xl mt-2">
         {userData.full_name || userData.username}
       </h1>
-      <div>
-        <div>Role: {userData.role} </div>
+
+      <div className="text-2xl">
+        {userData.role[0].toUpperCase() + userData.role.slice(1)}
       </div>
-      <div>Aura: {userData.aura}</div>
+
+      <div className="mb-3 text-2xl flex items-center gap-2">
+        {userData.aura} Aura{" "}
+        <FaFireAlt className="inline text-yellow-500 text-4xl" />
+      </div>
       {viewerData.username !== username && (
         <StartChat handleClick={handleStartChat} />
       )}
