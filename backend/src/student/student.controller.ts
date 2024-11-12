@@ -112,7 +112,7 @@ export async function getModuleDetails(req: any, res: any) {
   const { data, error } = await supabase
     .from("modules")
     .select(
-      "*, questions!inner(*, options!options_question_id_fkey(*), student_question!inner(*))"
+      "*, questions!inner(*, options!options_question_id_fkey(*), student_question(*))"
     )
     .eq("id", module_id);
 
@@ -180,10 +180,10 @@ export async function evaluate(req: any, res: any) {
 
   const aura_change = Math.round(auraPerQuestion * data);
 
-  const { error: auraUpdateError } = await supabase
-    .from("profiles")
-    .update({ aura: aura_change })
-    .eq("id", id);
+  const { error: auraUpdateError } = await supabase.rpc("update_aura_on_evaluation", {
+    amount: aura_change,
+    who: id
+  })
 
   if (auraUpdateError) {
     console.error(auraUpdateError);
